@@ -1,0 +1,2672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="https://use.typekit.net/eyx8ysz.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impact Response Plan Generator - Choctaw Nation Environmental Protection Service</title>
+<style>
+  
+
+  :root {
+    --cno-purple: #1E3D3B;
+    --cno-purple-light: #76B900;
+    --cno-purple-bg: #D1E0D7;
+    --cno-gold: #D4D96A;
+    --cno-gold-light: #EFF2CC;
+    --cno-green: #76B900;
+    --cno-green-hover: #5A9400;
+    --cno-blue: #7BC8E5;
+    --cno-brown: #1E3D3B;
+    --cno-dark: #343A40;
+    --cno-light: #FCFAF8;
+    --text: #1E3D3B;
+    --text-light: #6C757D;
+    --border: #D9E1E2;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-lg: 0 14px 30px -12px rgba(0,0,0,0.18), 0 8px 16px -12px rgba(0,0,0,0.12);
+  }
+
+  * { font-family: gill-sans-nova, sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    color: var(--text);
+    background: var(--cno-light);
+    line-height: 1.6;
+  }
+
+  /* === HEADER === */
+  .header {
+    background: #1E3D3B;
+    color: white;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .header::before,
+  .header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .header::before {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0) 32%, rgba(255,255,255,0.04) 100%);
+    opacity: 0.45;
+  }
+  .header::after {
+    background: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0));
+    opacity: 1;
+  }
+
+  .header-diamonds,
+  .footer-diamonds {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .diamond-accent {
+    position: absolute;
+    width: var(--size, 48px);
+    height: var(--size, 48px);
+    transform: rotate(45deg);
+    transform-origin: center;
+    border-radius: 0;
+    opacity: var(--opacity, 1);
+  }
+  .diamond-accent.solid-green { background: rgba(118,185,0,0.34); }
+  .diamond-accent.solid-green-deep { background: rgba(118,185,0,0.52); }
+  .diamond-accent.solid-gold { background: rgba(212,217,106,0.24); }
+  .diamond-accent.solid-gold-deep { background: rgba(212,217,106,0.38); }
+  .diamond-accent.solid-white { background: rgba(255,255,255,0.10); }
+  .diamond-accent.outline-green { border: 5px solid rgba(118,185,0,0.42); background: transparent; }
+  .diamond-accent.outline-gold { border: 4px solid rgba(212,217,106,0.34); background: transparent; }
+
+  /* Diamond strip between header and content */
+  .diamond-strip {
+    height: 6px;
+    background: linear-gradient(90deg, #76B900 0%, #76B900 33%, #D4D96A 33%, #D4D96A 67%, #76B900 67%, #76B900 100%);
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+    padding: 0.85rem 2rem;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+  }
+
+  .header-brand .diamond {
+    width: 10px; height: 10px;
+    background: var(--cno-gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .brand-text-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    line-height: 1.3;
+  }
+
+  .brand-org-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+  }
+
+  .brand-division {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #76B900;
+    letter-spacing: 0.01em;
+  }
+
+  .brand-rule {
+    width: 100%;
+    height: 1px;
+    background: #D4D96A;
+    margin: 3px 0;
+    opacity: 0.6;
+  }
+
+  .brand-department {
+    font-size: 0.76rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.02em;
+    word-spacing: 0.05em;
+  }
+
+  .seal-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: stretch;
+    gap: 0;
+    flex-shrink: 0;
+    padding: 4px 0;
+  }
+  .seal-divider .line {
+    flex: 1;
+    width: 1px;
+    background: rgba(212,217,106,0.5);
+  }
+  .seal-divider .mid-diamond {
+    width: 8px;
+    height: 8px;
+    background: #D4D96A;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    margin: 3px 0;
+  }
+
+  .app-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .app-title-row .app-diamond {
+    width: 6px; height: 6px;
+    background: #D4D96A;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .app-title-row .app-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #EFF2CC;
+    letter-spacing: 0.02em;
+  }
+
+  .header-brand h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .header-brand .subtitle {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    font-weight: 400;
+  }
+
+  .header-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+  .header-btn {
+    padding: 0.4rem 0.9rem;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .header-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
+  .header-btn.gold { background: var(--cno-gold); border-color: var(--cno-gold); color: var(--cno-dark); }
+  .header-btn.gold:hover { background: var(--cno-gold-light); }
+
+  /* === PROGRESS === */
+  .progress-bar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+  }
+
+  .progress-step {
+    display: flex; align-items: center; gap: 0.3rem;
+    font-size: 0.72rem; font-weight: 500;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+  }
+
+  .progress-step:hover { color: var(--cno-purple); }
+  .progress-step.active { background: var(--cno-purple-bg); color: var(--cno-purple); font-weight: 700; border-color: var(--cno-purple); }
+  .progress-step.completed { color: var(--cno-green); }
+  .progress-step .num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--border); display: flex;
+    align-items: center; justify-content: center; font-weight: 700; font-size: 0.65rem;
+    color: var(--text-light); flex-shrink: 0;
+  }
+  .progress-step.active .num { background: var(--cno-purple); color: white; }
+  .progress-step.completed .num { background: var(--cno-green); color: white; }
+
+  /* === CONTAINER === */
+  .container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+
+  .section {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    display: none;
+    animation: fadeIn 0.3s ease;
+    border: 1px solid var(--border);
+  }
+  .section.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .section-title {
+    font-size: 1.2rem; font-weight: 800; color: var(--cno-purple);
+    margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-title .diamond { width: 8px; height: 8px; background: var(--cno-gold); transform: rotate(45deg); flex-shrink: 0; }
+  .section-desc { color: var(--text-light); font-size: 0.88rem; margin-bottom: 1.5rem; }
+
+  /* === FORM ELEMENTS === */
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.25rem; color: var(--text); }
+  .form-group .hint { font-size: 0.78rem; color: var(--text-light); margin-bottom: 0.25rem; font-weight: 400; }
+
+  input[type="text"], input[type="number"], input[type="tel"],
+  input[type="date"], input[type="email"], input[type="file"], textarea, select {
+    width: 100%; padding: 0.55rem 0.75rem;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 0.9rem; color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s; background: white;
+  }
+  .compact-note{font-size:0.78rem;color:var(--text-light);margin-top:0.3rem;}
+  .inline-help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;border:none;background:var(--cno-green);color:#fff;font-size:0.72rem;font-weight:700;margin-left:0.35rem;cursor:pointer;vertical-align:middle;}
+  .inline-help:hover{background:var(--cno-green-hover);}
+  .helper-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.85rem;}
+  .metric-card{background:#FCFAF8;border:1px solid rgba(30,61,59,0.12);border-left:4px solid var(--cno-green);border-radius:10px;padding:0.8rem 0.9rem;}
+  .metric-card strong{display:block;color:var(--cno-purple);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.2rem;}
+  .metric-card span{font-size:1rem;font-weight:700;color:var(--text);} 
+  .alert-card{display:none;margin-top:0.8rem;padding:0.9rem 1rem;border-radius:10px;font-size:0.86rem;font-weight:600;}
+  .alert-card.show{display:block;}
+  .alert-card.warn{background:#EFF2CC;border:1px solid rgba(212,217,106,0.45);color:#6a5200;}
+  .alert-card.good{background:#D1E0D7;border:1px solid rgba(118,185,0,0.28);color:#0e5b2f;}
+  .alert-card.danger{background:#fee2e2;border:2px solid #ef4444;color:#991b1b;font-weight:700;}
+  .editable-table{border:2px solid rgba(212,217,106,0.55);box-shadow:0 0 0 4px rgba(212,217,106,0.10);background:#fffdf5;}
+  .editable-table thead th{background:#EFF2CC;color:#1E3D3B;}
+  .editable-hint{background:#EFF2CC;color:#1E3D3B;border:1px dashed rgba(30,61,59,0.24);padding:0.65rem 0.8rem;border-radius:10px;font-size:0.82rem;font-weight:600;margin-bottom:0.7rem;}
+  .repeat-list{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:0.85rem;}
+  .repeat-row{background:#FCFAF8;border:1px solid var(--border);border-radius:12px;padding:0.85rem;position:relative;}
+  .repeat-row .remove-row{position:absolute;top:0.6rem;right:0.6rem;padding:0.28rem 0.55rem;border:none;border-radius:999px;background:#1E3D3B;color:#fff;font-size:0.75rem;cursor:pointer;}
+  .repeat-row .remove-row:hover{background:#152B2A;}
+  .check-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.45rem 1rem;margin-bottom:0.7rem;}
+  .check-grid label{display:flex;align-items:flex-start;gap:0.5rem;font-weight:500;font-size:0.85rem;color:var(--text);}
+  .growth-option{display:flex;align-items:center;justify-content:space-between;gap:0.75rem;width:100%;background:#FCFAF8;border:1px solid rgba(30,61,59,0.10);border-radius:10px;padding:0.6rem 0.75rem;}
+  .growth-option .growth-left{display:flex;align-items:flex-start;gap:0.5rem;flex:1;}
+  .growth-option input[type="number"]{max-width:92px;min-width:92px;}
+  .mini-btn-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.45rem;}
+  .mini-btn{padding:0.42rem 0.8rem;border-radius:8px;border:1px solid rgba(30,61,59,0.18);background:#fff;color:var(--cno-purple);font-size:0.8rem;font-weight:700;cursor:pointer;}
+  .mini-btn:hover{background:#F5F3F1;}
+  .table-summary{margin-top:0.7rem;font-size:0.82rem;color:var(--text-light);}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;padding:1rem;z-index:300;}
+  .modal-backdrop.show{display:flex;}
+  .modal-card{background:#fff;max-width:680px;width:100%;border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid rgba(30,61,59,0.12);padding:1.25rem 1.25rem 1rem;}
+  .modal-card h3{color:var(--cno-purple);margin-bottom:0.55rem;}
+  .modal-card p,.modal-card li{font-size:0.9rem;color:var(--text);}
+  .modal-card ul{margin-left:1.15rem;}
+  input:focus, textarea:focus, select:focus {
+    outline: none; border-color: var(--cno-purple);
+    box-shadow: 0 0 0 3px rgba(30,61,59,0.12);
+  }
+  textarea { min-height: 75px; resize: vertical; }
+
+  .row { display: grid; gap: 1rem; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .row-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+  @media (max-width: 640px) { .row-2, .row-3, .row-4, .row-5 { grid-template-columns: 1fr; }
+    .header-inner { flex-direction: column; align-items: flex-start; padding: 0.7rem 1rem; gap: 0.6rem; }
+    .header-actions { width: 100%; justify-content: flex-end; }
+    .seal-mark { width: 56px; height: 56px; }
+    .seal-divider { display: none; }
+    .brand-org-name { font-size: 0.92rem; }
+    .brand-division { font-size: 0.7rem; }
+    .brand-department { font-size: 0.66rem; }
+    .app-title-row .app-name { font-size: 0.74rem; }
+  }
+
+  /* === TOGGLE GROUP === */
+  .toggle-group {
+    background: var(--cno-purple-bg); border-radius: var(--radius);
+    padding: 0.9rem 1.1rem; margin-bottom: 0.8rem;
+    border-left: 4px solid var(--cno-purple-light);
+  }
+  .toggle-group label.toggle-label {
+    display: flex; align-items: center; gap: 0.6rem;
+    cursor: pointer; font-weight: 600; font-size: 0.9rem;
+  }
+  .toggle-group input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--cno-purple); cursor: pointer; }
+  .toggle-content { display: none; margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid rgba(30,61,59,0.12); }
+  .toggle-content.show { display: block; }
+
+  .conditional { display: none; animation: fadeIn 0.3s ease; }
+  .conditional.show { display: block; }
+
+  /* === BUTTONS === */
+  .btn-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); gap: 1rem;
+  }
+  .btn {
+    padding: 0.6rem 1.6rem; border: none; border-radius: 8px;
+    font-family: inherit; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--cno-purple); color: white; }
+  .btn-primary:hover { background: var(--cno-purple-light); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--text-light); border: 1.5px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--text-light); color: var(--text); }
+  .btn-generate { background: var(--cno-green); color: white; padding: 0.9rem 2.2rem; font-size: 1.05rem; }
+  .btn-generate:hover { background: var(--cno-green-hover); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+  /* === TABLES === */
+  .year-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+  .year-table th, .year-table td { padding: 0.45rem 0.7rem; border: 1px solid var(--border); font-size: 0.85rem; }
+  .year-table th { background: var(--cno-purple-bg); font-weight: 600; color: var(--cno-purple); }
+  .year-table input { border: none; background: transparent; width: 100%; padding: 0.25rem; font-family: inherit; font-size: 0.85rem; }
+  .year-table input:focus { outline: none; background: #fef9e7; }
+
+  /* === MISC === */
+  .info-box {
+    background: #fef9e7; border-left: 4px solid var(--cno-gold);
+    padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; margin-bottom: 0.9rem;
+  }
+  .checkbox-list { list-style: none; }
+  .checkbox-list li { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.35rem 0; }
+  .checkbox-list input[type="checkbox"] { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--cno-purple); flex-shrink: 0; }
+
+  .sub-heading {
+    font-weight: 700; font-size: 0.95rem; color: var(--cno-purple);
+    margin: 1.2rem 0 0.5rem 0; padding-top: 0.8rem; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .sub-heading .diamond { width: 6px; height: 6px; background: var(--cno-gold); transform: rotate(45deg); }
+
+  .appendix-card {
+    background: var(--cno-light); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; transition: all 0.2s;
+  }
+  .appendix-card.selected { border-color: var(--cno-purple); background: var(--cno-purple-bg); }
+
+  .stage-trigger-box {
+    background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: var(--radius);
+    padding: 1rem 1.2rem; margin-bottom: 1rem;
+  }
+  .stage-trigger-box h4 { color: #9a3412; margin-bottom: 0.5rem; font-size: 0.9rem; display: flex; align-items: center; gap: 0.3rem; }
+
+  .final-section { text-align: center; padding: 2.5rem 2rem; }
+  .final-section h2 { font-weight: 800; color: var(--cno-purple); margin-bottom: 0.6rem; font-size: 1.4rem; }
+  .final-section p { color: var(--text-light); max-width: 520px; margin: 0 auto 1.5rem; font-size: 0.92rem; }
+
+  #status-msg { display: none; margin-top: 1rem; padding: 0.8rem 1rem; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; }
+  #status-msg.success { display: block; background: #d1fae5; color: #065f46; }
+  #status-msg.error { display: block; background: #fee2e2; color: #991b1b; }
+
+  .logo-preview { max-height: 60px; margin-top: 0.5rem; border: 1px solid var(--border); border-radius: 6px; padding: 4px; }
+
+  /* === FOOTER === */
+  .footer {
+    text-align: center; padding: 1.5rem; font-size: 0.72rem; color: var(--text-light);
+    border-top: 1px solid var(--border); margin-top: 2rem; line-height: 1.5;
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(180deg, rgba(30,61,59,0.03), rgba(30,61,59,0));
+    pointer-events:none;
+    opacity:1;
+  }
+  .footer strong { color: var(--text); }
+  .footer > * { position: relative; z-index: 1; }
+
+  .save-indicator {
+    font-size: 0.72rem; color: rgba(255,255,255,0.7);
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .save-indicator.saved { color: #86efac; }
+
+  .export-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+
+  .header { background: #1E3D3B; }
+  .header-brand { gap: 1.1rem; }
+  .seal-mark {
+    width: 78px; height: 78px; flex-shrink: 0; object-fit: contain;
+    background: transparent; padding: 0; border: none; border-radius: 0;
+    box-shadow: none;
+  }
+  .notice-bar {
+    background: #EFF2CC;
+    border-bottom: 1px solid #D8DABA; color: #1E3D3B; font-size: 0.78rem; padding: 0.55rem 1rem; text-align: center;
+  }
+  .compliance-card {
+    background: #FCFAF8;
+    border: 1px solid var(--border); border-left: 4px solid var(--cno-gold); border-radius: var(--radius);
+    padding: 1rem 1.1rem; margin-bottom: 1rem;
+  }
+  .minor-actions { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; margin-top:0.8rem; }
+  .btn-tertiary { background:#fff; color:var(--cno-purple); border:1.5px solid var(--cno-purple); }
+  .btn-tertiary:hover { background:#F5F3F1; }
+  .footer-seal { display:block; width:52px; height:52px; object-fit:contain; margin:0 auto 0.7rem; }
+  .legal-mini { max-width: 900px; margin: 0 auto; }
+  .stage-trigger-box h4 { color:#1E3D3B; }
+  .info-box { background:#EFF2CC; border-left:4px solid var(--cno-gold); }
+  .toggle-group { background:#D1E0D7; border-left:4px solid var(--cno-green); }
+  .section-title, .sub-heading, .year-table th { color: var(--cno-purple); }
+  input:focus, textarea:focus, select:focus { box-shadow: 0 0 0 3px rgba(118,185,0,0.12); }
+  .progress-step:hover, .progress-step.active { color: var(--cno-purple); }
+  .progress-step.active { border-color: var(--cno-green); }
+  .progress-step.active .num { background: var(--cno-green); }
+  .header-btn.gold { background: var(--cno-gold); border-color: var(--cno-gold); color: #1E3D3B; }
+  /* Bridge import banner */
+  .bridge-banner {
+    display: none;
+    background: linear-gradient(90deg, #1E3D3B, #287575);
+    color: white; padding: 0.7rem 1.2rem;
+    font-size: 0.84rem; animation: fadeIn 0.4s ease;
+  }
+  .bridge-banner.show { display: block; }
+  .bridge-banner-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+  }
+  .bridge-banner-left { display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0; }
+  .bridge-banner-left .bridge-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(118,185,0,0.25); display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 1rem;
+  }
+  .bridge-banner-info { min-width: 0; }
+  .bridge-banner-info strong { display: block; font-size: 0.88rem; }
+  .bridge-banner-info span { font-size: 0.78rem; opacity: 0.85; }
+  .bridge-banner-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+  .bridge-btn-import {
+    background: #76B900; color: white; border: none; padding: 0.45rem 1rem;
+    border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer;
+    font-family: inherit;
+  }
+  .bridge-btn-import:hover { background: #5A9400; }
+  .bridge-btn-dismiss {
+    background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.25); padding: 0.45rem 0.7rem;
+    border-radius: 8px; font-size: 0.82rem; cursor: pointer; font-family: inherit;
+  }
+  .bridge-btn-dismiss:hover { background: rgba(255,255,255,0.2); }
+  .bridge-import-toast {
+    display: none; background: #d1fae5; color: #065f46; border: 1px solid #86efac;
+    padding: 0.6rem 1rem; font-size: 0.84rem; font-weight: 600;
+    text-align: center; animation: fadeIn 0.3s ease;
+  }
+  .bridge-import-toast.show { display: block; }
+  .bridge-detail-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.5rem; margin-top: 0.6rem;
+  }
+  .bridge-detail-item {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 0.4rem 0.6rem; font-size: 0.76rem;
+  }
+  .bridge-detail-item strong { display: block; opacity: 0.7; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  @media print {
+    .header, .progress-bar, .notice-bar, .header-actions, .btn, .btn-row, .minor-actions, .bridge-banner, .bridge-import-toast { display:none !important; }
+    body { background:#fff; }
+    .container { max-width:none; padding:0; }
+    .section { display:block !important; box-shadow:none; border:none; margin:0 0 12pt; padding:0; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-diamonds" aria-hidden="true">
+    <span class="diamond-accent outline-green" style="--size: 100px; right: 180px; top: -18px; --opacity: 0.50;"></span>
+    <span class="diamond-accent solid-gold" style="--size: 80px; right: 120px; top: -4px; --opacity: 0.70;"></span>
+    <span class="diamond-accent solid-green-deep" style="--size: 64px; right: 72px; top: 28px; --opacity: 0.65;"></span>
+    <span class="diamond-accent solid-gold-deep" style="--size: 14px; right: 56px; top: 14px; --opacity: 0.60;"></span>
+  </div>
+  <div class="header-inner">
+    <div class="header-brand">
+      <img class="seal-mark" data-seal="true" src="HeroImage_CH.png" alt="Choctaw Nation seal" onerror="handleSealLoadError(this)">
+      <div class="seal-divider" aria-hidden="true">
+        <span class="line"></span>
+        <span class="mid-diamond"></span>
+        <span class="line"></span>
+      </div>
+      <div class="brand-text-stack">
+        <span class="brand-org-name">Choctaw Nation of Oklahoma</span>
+        <span class="brand-division">Environmental Protection Service</span>
+        <div class="brand-rule"></div>
+        <span class="brand-department">Office of Water Resource Management</span>
+        <div class="app-title-row">
+          <span class="app-name">Impact Response Plan Generator</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="save-indicator" id="saveIndicator">&#9679; Not saved</span>
+      <button class="header-btn" onclick="saveProgress()" title="Save your progress to resume later">&#128190; Save</button>
+      <button class="header-btn" onclick="loadProgress()" title="Load previously saved progress">&#128194; Load</button>
+      <button class="header-btn" onclick="clearProgress()" title="Clear all saved data">&#128465; Clear</button>
+    </div>
+  </div>
+  <div class="diamond-strip"></div>
+</div>
+
+<div class="notice-bar">Internal-use planning software for authorized water system, utility, and tribal personnel. Drafts should be reviewed and formally approved before operational or external use.</div>
+
+<!-- Bridge import banner (shown when Oka Vlhpisa data is detected) -->
+<div class="bridge-banner" id="bridgeBanner">
+  <div class="bridge-banner-inner">
+    <div class="bridge-banner-left">
+      <div class="bridge-icon">&#9830;</div>
+      <div class="bridge-banner-info">
+        <strong id="bridgeBannerTitle">Oka Vlhpisa data detected</strong>
+        <span id="bridgeBannerSubtitle">Import provider info, facilities, and system health to pre-fill this plan.</span>
+        <div class="bridge-detail-grid" id="bridgeDetailGrid"></div>
+      </div>
+    </div>
+    <div class="bridge-banner-actions">
+      <button class="bridge-btn-import" onclick="importFromBridge()">Import Data</button>
+      <button class="bridge-btn-dismiss" onclick="dismissBridge()">Dismiss</button>
+    </div>
+  </div>
+</div>
+<div class="bridge-import-toast" id="bridgeToast"></div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar" id="progressBar">
+  <div class="progress-step active" data-step="1" onclick="goToStep(1)"><span class="num">1</span> Provider</div>
+  <div class="progress-step" data-step="2" onclick="goToStep(2)"><span class="num">2</span> System</div>
+  <div class="progress-step" data-step="3" onclick="goToStep(3)"><span class="num">3</span> Governance</div>
+  <div class="progress-step" data-step="4" onclick="goToStep(4)"><span class="num">4</span> Outreach</div>
+  <div class="progress-step" data-step="5" onclick="goToStep(5)"><span class="num">5</span> Triggers</div>
+  <div class="progress-step" data-step="6" onclick="goToStep(6)"><span class="num">6</span> Enforcement</div>
+  <div class="progress-step" data-step="7" onclick="goToStep(7)"><span class="num">7</span> Calendar</div>
+  <div class="progress-step" data-step="8" onclick="goToStep(8)"><span class="num">8</span> Appendices</div>
+  <div class="progress-step" data-step="9" onclick="goToStep(9)"><span class="num">9</span> Generate</div>
+</div>
+
+<div class="container">
+
+<!-- ====== STEP 1: Provider Info ====== -->
+<div class="section active" id="step1">
+  <h2 class="section-title"><span class="diamond"></span> Water Provider Information</h2>
+  <p class="section-desc">Enter the water provider's basic information. The provider name will auto-populate throughout the entire document.</p>
+
+  <div class="form-group">
+    <label>Water Provider Name *</label>
+    <div class="hint">This name will appear throughout the entire plan document.</div>
+    <input type="text" id="providerName" placeholder="e.g., Southeastern Oklahoma Rural Water District #7" required>
+  </div>
+
+  <div class="row row-2">
+    <div class="form-group"><label>Address</label><input type="text" id="providerAddress" placeholder="Full mailing address"></div>
+    <div class="form-group"><label>Telephone Number</label><input type="tel" id="providerPhone" placeholder="(555) 555-5555"></div>
+  </div>
+
+  <div class="form-group"><label>PWSID Number</label><input type="text" id="waterRightNos" placeholder="e.g., OK1023456"></div>
+
+  <div class="sub-heading"><span class="diamond"></span> Provider Logo (Optional)</div>
+  <div class="info-box">Upload your provider's logo to include on the title page of the generated document. PNG or JPG recommended.</div>
+  <div class="form-group">
+    <input type="file" id="providerLogo" accept="image/*" onchange="previewLogo(this)">
+    <img id="logoPreview" class="logo-preview" style="display:none">
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Production Capacity</div>
+  <div class="row row-2">
+    <div class="form-group"><label>Maximum System Capacity (gpm)</label><input type="text" id="surfaceWaterGpm" placeholder="Gallons per minute"></div>
+    <div class="form-group"><label>Maximum Booster Pump Capacity (gpm) <span class="compact-note" style="display:inline;">Optional</span></label><input type="text" id="boosterCapGpm" placeholder="Gallons per minute (optional)"></div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Storage</div>
+  <div class="row row-2">
+    <div class="form-group"><label>Primary Storage Capacity</label><input type="text" id="elevatedStorage" placeholder="Capacity/description (e.g., 500,000 gal elevated tank)"></div>
+    <div class="form-group"><label>Secondary Storage Capacity</label><input type="text" id="ingroundClearwell" placeholder="Additional storage (e.g., 250,000 gal ground clearwell)"></div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Signature / Responsible Parties</div>
+  <div class="row row-3">
+    <div class="form-group"><label>System Manager</label><input type="text" id="completedBy" placeholder="Name"></div>
+    <div class="form-group"><label>System Manager Title</label><input type="text" id="completedByTitle" placeholder="Job title"></div>
+    <div class="form-group"><label>System Manager Email</label><input type="email" id="completedByEmail" placeholder="name@example.com"></div>
+  </div>
+  <div class="row row-2">
+    <div class="form-group"><label>System Manager Phone</label><input type="tel" id="completedByPhone" placeholder="(555) 555-5555"></div>
+    <div class="form-group"><label>System Manager Alternate Contact</label><input type="text" id="completedByAltContact" placeholder="Optional"></div>
+  </div>
+  <div class="row row-3">
+    <div class="form-group"><label>Mayor or Board Chairperson</label><input type="text" id="responsiblePerson" placeholder="Name"></div>
+    <div class="form-group"><label>Mayor / Board Chair Title</label><input type="text" id="responsibleTitle" placeholder="Title"></div>
+    <div class="form-group"><label>Mayor / Board Chair Email</label><input type="email" id="responsibleEmail" placeholder="name@example.com"></div>
+  </div>
+  <div class="row row-2">
+    <div class="form-group"><label>Mayor / Board Chair Phone</label><input type="tel" id="responsiblePhone" placeholder="(555) 555-5555"></div>
+    <div class="form-group"><label>Mayor / Board Chair Alternate Contact</label><input type="text" id="responsibleAltContact" placeholder="Optional"></div>
+  </div>
+
+  <div class="btn-row"><span></span><button class="btn btn-primary" onclick="goToStep(2)">Next: System Details &rarr;</button></div>
+</div>
+
+<!-- ====== STEP 2: System Details ====== -->
+<div class="section" id="step2">
+  <h2 class="section-title"><span class="diamond"></span> System &amp; Customer Details</h2>
+  <p class="section-desc">Describe the water system, customer base, and usage history.</p>
+
+  <div class="row row-2">
+    <div class="form-group"><label>Population Served</label><input type="text" id="populationServed" placeholder="Number of people served"></div>
+    <div class="form-group"><label>Service Area (square miles)</label><input type="text" id="serviceArea" placeholder="Approximate square miles"></div>
+  </div>
+  <div class="sub-heading"><span class="diamond"></span> Water System Facilities / Pump Stations</div>
+  <div class="info-box">Add each major facility, pump station, plant, tank site, or other critical location individually. Detailed entries produce a more accurate and site-specific plan.</div>
+  <div id="facilityRepeater" class="repeat-list"></div>
+  <input type="hidden" id="facilities">
+  <button type="button" class="btn btn-tertiary" onclick="addFacilityRow()">+ Add Facility / Pump Station</button>
+
+  <div class="row row-2" style="margin-top:1rem;">
+    <div class="form-group"><label>Number of Fire Hydrants</label><input type="number" id="fireHydrants" placeholder="Total count"></div>
+    <div class="form-group"><label>System Notes</label><input type="text" id="systemNotes" placeholder="Optional operational notes"></div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Active Connections</div>
+  <div class="row row-5">
+    <div class="form-group"><label>Residential</label><input type="number" id="connResidential" placeholder="Count"></div>
+    <div class="form-group"><label>Wholesale / Other Systems</label><input type="number" id="connWholesale" placeholder="Count"></div>
+    <div class="form-group"><label>Commercial</label><input type="number" id="connCommercial" placeholder="Count"></div>
+    <div class="form-group"><label>Institutional</label><input type="number" id="connInstitutional" placeholder="Count"></div>
+    <div class="form-group"><label>Industrial</label><input type="number" id="connIndustrial" placeholder="Count"></div>
+  </div>
+
+  <div class="form-group"><label>Potential Supplemental Supply Sources (Emergency)</label><textarea id="supplementalSources" placeholder="Describe any supplemental water sources available during emergencies"></textarea></div>
+  <div class="form-group"><label>Potential Interconnections (Emergency)</label><textarea id="interconnections" placeholder="List any potential interconnections with other water systems"></textarea></div>
+
+  <div class="sub-heading"><span class="diamond"></span> Water Use (5 Years)</div>
+  <table class="year-table">
+    <thead><tr><th>Year</th><th>Water Produced (Gal)</th><th>Water Metered (Gal)</th><th>Non-Metered Water (Gal)</th></tr></thead>
+    <tbody>
+      <tr><td><input type="text" id="yr1_year" value="2024"></td><td><input type="text" id="yr1_produced"></td><td><input type="text" id="yr1_metered"></td><td><input type="text" id="yr1_nonmetered"></td></tr>
+      <tr><td><input type="text" id="yr2_year" value="2023"></td><td><input type="text" id="yr2_produced"></td><td><input type="text" id="yr2_metered"></td><td><input type="text" id="yr2_nonmetered"></td></tr>
+      <tr><td><input type="text" id="yr3_year" value="2022"></td><td><input type="text" id="yr3_produced"></td><td><input type="text" id="yr3_metered"></td><td><input type="text" id="yr3_nonmetered"></td></tr>
+      <tr><td><input type="text" id="yr4_year" value="2021"></td><td><input type="text" id="yr4_produced"></td><td><input type="text" id="yr4_metered"></td><td><input type="text" id="yr4_nonmetered"></td></tr>
+      <tr><td><input type="text" id="yr5_year" value="2020"></td><td><input type="text" id="yr5_produced"></td><td><input type="text" id="yr5_metered"></td><td><input type="text" id="yr5_nonmetered"></td></tr>
+    </tbody>
+  </table>
+  <div class="row row-2" style="margin-top:0.8rem;">
+    <div class="form-group"><label>Total Permitted Amount (if applicable)</label><input type="text" id="totalPermittedAmount" placeholder="Annual permitted amount"></div>
+    <div class="form-group"><label>Water Use Reconciliation</label><div id="waterUseSummary" class="table-summary">Enter any two values in a row and the third will auto-calculate when possible.</div></div>
+  </div>
+  <div id="waterUseAlert" class="alert-card"></div>
+
+  <div class="sub-heading"><span class="diamond"></span> Projected Water Demands</div>
+  <div class="info-box">Enter the total projected growth percentage for each selected factor over the full projection horizon. Example: entering 8 means about 8% total growth over the selected number of years, not 8% every year. This is a planning assist and should still be reviewed against actual system capacity, permitted supply, and operating conditions.</div>
+  <div class="compact-note" style="margin-bottom:0.75rem;"><strong>How to use this section:</strong> the growth values below are simple planning percentages applied over the selected planning period. Water loss and drought fields are also simple percentage adjustments for planning purposes.</div>
+  <div class="check-grid">
+    <label class="growth-option"><span class="growth-left"><input type="checkbox" id="growth_pop" checked><span>Population / residential growth</span></span><input type="number" id="growth_pop_pct" value="4" min="0" step="0.1" title="Percent over full planning period"></label>
+    <label class="growth-option"><span class="growth-left"><input type="checkbox" id="growth_commercial" checked><span>Commercial expansion</span></span><input type="number" id="growth_commercial_pct" value="6" min="0" step="0.1" title="Percent over full planning period"></label>
+    <label class="growth-option"><span class="growth-left"><input type="checkbox" id="growth_industrial"><span>Industrial growth</span></span><input type="number" id="growth_industrial_pct" value="10" min="0" step="0.1" title="Percent over full planning period"></label>
+    <label class="growth-option"><span class="growth-left"><input type="checkbox" id="growth_systemloss"><span>Water loss planning adjustment</span></span><input type="number" id="growth_systemloss_pct" value="3" min="0" step="0.1" title="Percent over full planning period"></label>
+    <label class="growth-option"><span class="growth-left"><input type="checkbox" id="growth_drought"><span>Drought / supply stress adjustment</span></span><input type="number" id="growth_drought_pct" value="5" min="0" step="0.1" title="Percent over full planning period"></label>
+    <label class="growth-option"><span class="growth-left"><input type="checkbox" id="growth_wholesale"><span>Wholesale / other system demand growth</span></span><input type="number" id="growth_wholesale_pct" value="7" min="0" step="0.1" title="Percent over full planning period"></label>
+  </div>
+  <div class="row row-3">
+    <div class="form-group"><label>Custom Additional Growth (%)</label><input type="number" id="growthCustomPct" placeholder="0" min="0" step="0.1"></div>
+    <div class="form-group"><label>Projection Horizon (Years)</label><input type="number" id="growthProjectionYears" value="10" min="1" step="1"></div>
+    <div class="form-group"><label>Planning Notes</label><input type="text" id="futureGrowthNotes" placeholder="Optional notes on subdivisions, industry, drought, permits, or capacity."></div>
+  </div>
+  <div class="row row-3">
+    <div class="form-group"><label>Capacity Review Threshold (%)</label><input type="number" id="capacityReviewThreshold" value="80" min="0" max="100" step="0.1"></div>
+    <div class="form-group"><label>Capacity Restriction Threshold (%)</label><input type="number" id="capacityRestrictionThreshold" value="50" min="0" max="100" step="0.1"></div>
+    <div class="form-group"><label>Meter / Growth Moratorium Threshold (%)</label><input type="number" id="capacityMoratoriumThreshold" value="50" min="0" max="100" step="0.1"></div>
+  </div>
+  <div class="helper-grid">
+    <div class="metric-card"><strong>Average Annual Water Produced</strong><span id="avgProducedDisplay">Not calculated yet</span></div>
+    <div class="metric-card"><strong>Total Selected Growth</strong><span id="growthPctDisplay">0%</span></div>
+    <div class="metric-card"><strong>Projected Annual Demand</strong><span id="projectedDemandDisplay">Not calculated yet</span></div>
+    <div class="metric-card"><strong>Annual System Capacity</strong><span id="annualCapacityDisplay">Not entered</span></div>
+    <div class="metric-card"><strong>Current Capacity Used</strong><span id="currentCapacityUsedDisplay">Not calculated yet</span></div>
+    <div class="metric-card"><strong>Projected Capacity Used</strong><span id="projectedCapacityUsedDisplay">Not calculated yet</span></div>
+    <div class="metric-card"><strong>Total Permitted Amount</strong><span id="avgPermittedDisplay">Not entered</span></div>
+  </div>
+  <div id="supplyDemandAlert" class="alert-card"></div>
+  <div class="form-group" style="margin-top:1rem;"><label>Future Growth (Planning Horizon Projection)</label><textarea id="futureGrowth" placeholder="Describe subdivisions, commercial expansion, industrial recruitment, seasonal demand shifts, drought exposure, or wholesale obligations."></textarea><div class="mini-btn-row"><button type="button" class="mini-btn" onclick="regenerateGrowthNarrative()">Regenerate Growth Narrative</button></div></div>
+  <div class="form-group"><label>Supply and Demand Balance</label><textarea id="supplyDemandBalance" placeholder="This can be auto-generated from the calculator above and further edited by staff."></textarea><div class="compact-note">This field auto-generates from Step 2 only. Once you edit it manually, it will stop overwriting until you click regenerate.</div><div class="mini-btn-row"><button type="button" class="mini-btn" onclick="regenerateSupplyDemandBalance()">Regenerate Supply / Demand Text</button></div></div>
+  <div class="form-group"><label>Plant Capacity / Meter Growth Moratorium</label><textarea id="capacityMoratoriumPlan" placeholder="This can be auto-generated from the calculator above and further edited by staff."></textarea><div class="compact-note">This field auto-generates from Step 2 only. Once you edit it manually, it will stop overwriting until you click regenerate.</div><div class="mini-btn-row"><button type="button" class="mini-btn" onclick="regenerateCapacityMoratoriumPlan()">Regenerate Capacity / Moratorium Text</button></div></div>
+
+  <div class="sub-heading"><span class="diamond"></span> Optional System Sections</div>
+  <div class="toggle-group">
+    <label class="toggle-label"><input type="checkbox" id="hasWastewater" onchange="toggleConditional('wastewaterFields', this.checked)"> Does the provider operate a wastewater collection and treatment system?</label>
+    <div class="toggle-content" id="wastewaterFields">
+      <div class="form-group"><label>Wastewater System Description</label><textarea id="wastewaterDesc" placeholder="Stations, sewer pipe, connections, MGD capacity, peak MGD, etc."></textarea></div>
+    </div>
+  </div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="hasReclaimedWater" onchange="toggleConditional('reclaimedFields', this.checked)"> Include reclaimed/reuse water section?</label>
+    <div class="toggle-content" id="reclaimedFields"><div class="info-box">Encourages public acceptance of reclaimed water for outdoor watering, golf courses, car washes, parks, and school-age education.</div></div>
+  </div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="hasWholesale" onchange="toggleConditional('wholesaleFields', this.checked)"> Distribute water to wholesale customers / other water systems?</label>
+    <div class="toggle-content" id="wholesaleFields"><div class="form-group"><label>Wholesale Customers / Other Water Systems</label><textarea id="wholesaleProviders" placeholder="List all wholesale water providers"></textarea></div></div>
+  </div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="hasMultiFamily"> Include multi-family residential in customer types?</label></div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+    <button class="btn btn-primary" onclick="goToStep(3)">Next: Governance &rarr;</button>
+  </div>
+</div>
+
+<!-- ====== STEP 3: Governance ====== -->
+<div class="section" id="step3">
+  <h2 class="section-title"><span class="diamond"></span> Governance &amp; Authorization</h2>
+  <p class="section-desc">Define the organizational and legal framework for the plan.</p>
+
+  <div class="row row-2">
+    <div class="form-group"><label>Entity Type</label>
+      <select id="entityType" onchange="document.getElementById('entityOtherField').classList.toggle('show', this.value==='other')">
+        <option value="trust">Oklahoma Public Trust Rural Water System</option><option value="city">City/Municipality</option><option value="district">Rural Water District</option><option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-group"><label>County</label><input type="text" id="county" placeholder="County name"></div>
+  </div>
+  <div class="conditional" id="entityOtherField"><div class="form-group"><label>Describe Entity Type</label><input type="text" id="entityTypeOther" placeholder="Describe"></div></div>
+
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="hasOrdinance" onchange="toggleConditional('ordinanceFields', this.checked)"> Adopted pursuant to a specific ordinance?<button type="button" class="inline-help" onclick="openHelpModal('ordinance')">?</button></label>
+    <div class="toggle-content" id="ordinanceFields">
+      <div class="compact-note" style="margin-bottom:0.55rem;">Use this when the governing body is formally adopting the plan through an ordinance, code section, or similar action so the plan cites the authority it actually rests on.</div>
+      <div class="row row-2">
+        <div class="form-group"><label>Ordinance Number</label><input type="text" id="ordinanceNo"></div>
+        <div class="form-group"><label>City Code Section</label><input type="text" id="cityCodeSection"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Board Meetings &amp; Monitoring</div>
+  <div class="row row-4">
+    <div class="form-group"><label>Meeting Days</label><input type="text" id="meetingDays" placeholder="e.g., 1st and 3rd Tuesday"></div>
+    <div class="form-group"><label>Meeting Time</label><input type="text" id="meetingTime" placeholder="e.g., 6:00 p.m."></div>
+    <div class="form-group"><label>Meeting Location</label><input type="text" id="meetingLocation" placeholder="e.g., Town Hall, Board Room"></div>
+    <div class="form-group"><label>Monitoring Frequency</label><select id="monitoringFreq"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Emergency Management Contacts</div>
+  <div class="info-box">These contacts will be included in the Additional Notifications section of the plan.</div>
+  <div class="row row-2">
+    <div class="form-group"><label>County Emergency Management Coordinator</label><input type="text" id="emCoordinator" placeholder="Name and phone"></div>
+    <div class="form-group"><label>Fire Chief</label><input type="text" id="fireChief" placeholder="Name and phone"></div>
+  </div>
+  <div class="row row-2">
+    <div class="form-group"><label>County Judge/Commissioner</label><input type="text" id="countyJudge" placeholder="Name and phone"></div>
+    <div class="form-group"><label>DEQ Engineering Enforcement Contact</label><input type="text" id="deqContact" placeholder="Name and phone"></div>
+  </div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="deqServiceAreaSpecific"> Use service-area specific DEQ Engineering Enforcement contact</label><div class="compact-note">If checked, enter the known contact above or leave a note for completion during final review.</div></div>
+    <div class="form-group"><label>Court Type for Violations</label><select id="courtType"><option value="municipal court">Municipal Court</option><option value="district court">District Court</option></select></div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goToStep(2)">&larr; Back</button>
+    <button class="btn btn-primary" onclick="goToStep(4)">Next: Public Outreach &rarr;</button>
+  </div>
+</div>
+
+<!-- ====== STEP 4: Public Outreach ====== -->
+<div class="section" id="step4">
+  <h2 class="section-title"><span class="diamond"></span> Public Involvement &amp; Education</h2>
+  <p class="section-desc">Select notification and education methods.</p>
+
+  <div class="form-group"><label>How was public input gathered?</label>
+    <div class="check-grid">
+      <label><input type="checkbox" id="pi_publicMeeting"> Public meeting</label>
+      <label><input type="checkbox" id="pi_notice"> Public notice</label>
+      <label><input type="checkbox" id="pi_hearing"> Formal hearing</label>
+      <label><input type="checkbox" id="pi_boardInput"> Board / council input</label>
+      <label><input type="checkbox" id="pi_customerComments"> Customer comments</label>
+      <label><input type="checkbox" id="pi_online"> Website / online posting</label>
+      <label><input type="checkbox" id="pi_social"> Social media outreach</label>
+      <label><input type="checkbox" id="pi_other_check"> Other</label>
+    </div>
+    <textarea id="publicInputMethod" placeholder="Add details, dates, meeting names, or other public input notes."></textarea>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Notification Methods</div>
+  <ul class="checkbox-list">
+    <li><input type="checkbox" id="notify_newspaper" checked><label>Newspaper of general circulation</label></li>
+    <li><input type="checkbox" id="notify_directmail" checked><label>Direct mail (bill, insert, or special mailing)</label></li>
+    <li><input type="checkbox" id="notify_psa" checked><label>Public service announcements</label></li>
+    <li><input type="checkbox" id="notify_signs" checked><label>Signs posted in public places</label></li>
+    <li><input type="checkbox" id="notify_flyers"><label>Take-home flyers at schools</label></li>
+    <li><input type="checkbox" id="notify_meetings" checked><label>Public meetings / community council meetings</label></li>
+    <li><input type="checkbox" id="notify_social" checked><label>Social media</label></li>
+    <li><input type="checkbox" id="notify_website" checked><label>Provider website</label></li>
+    <li><input type="checkbox" id="notify_masstext" checked><label>Mass text communication</label></li>
+    <li><input type="checkbox" id="notify_radio"><label>Radio</label></li>
+    <li><input type="checkbox" id="notify_localnews"><label>Local news outlets</label></li>
+    <li><input type="checkbox" id="notify_email"><label>Email alerts and notifications</label></li>
+  </ul>
+
+  <div class="sub-heading"><span class="diamond"></span> Education Distribution Methods</div>
+  <ul class="checkbox-list">
+    <li><input type="checkbox" id="edu_newsletter"><label>Newsletter</label></li>
+    <li><input type="checkbox" id="edu_social" checked><label>Social media</label></li>
+    <li><input type="checkbox" id="edu_website" checked><label>Provider website</label></li>
+  </ul>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goToStep(3)">&larr; Back</button>
+    <button class="btn btn-primary" onclick="goToStep(5)">Next: Stage Triggers &rarr;</button>
+  </div>
+</div>
+
+<!-- ====== STEP 5: Stage Triggers ====== -->
+<div class="section" id="step5">
+  <h2 class="section-title"><span class="diamond"></span> Impact Response Stage Triggers</h2>
+  <p class="section-desc">Define thresholds that trigger each response stage. You can set different values per stage.</p>
+
+  <div class="info-box">Select which trigger criteria apply, then set specific values for each stage. Stages build on each other automatically.</div>
+
+  <div class="sub-heading"><span class="diamond"></span> Trigger Type Selection</div>
+  <ul class="checkbox-list">
+    <li><input type="checkbox" id="trig_demand" checked onchange="toggleConditional('trigDemandFields', this.checked)"><label>Total daily water demand thresholds</label></li>
+    <li><input type="checkbox" id="trig_supply" onchange="toggleConditional('trigSupplyFields', this.checked)"><label>Available water supply thresholds</label></li>
+    <li><input type="checkbox" id="trig_tank" onchange="toggleConditional('trigTankFields', this.checked)"><label>Tank level / pressure thresholds</label></li>
+    <li><input type="checkbox" id="trig_seasonal"><label>Seasonal triggers (May 1 - September 30)</label></li>
+    <li><input type="checkbox" id="trig_reservoir" onchange="toggleConditional('trigReservoirFields', this.checked)"><label>Reservoir level thresholds</label></li>
+  </ul>
+
+  <div class="conditional" id="trigDemandFields">
+    <div class="stage-trigger-box">
+      <h4>&#9888;&#65039; Daily Demand Trigger Values (Per Stage)</h4>
+      <table class="year-table" style="margin-top:0.5rem">
+        <thead><tr><th>Stage</th><th>MG Threshold</th><th>Duration/Condition</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;background:#f0fdf4">Stage 2 - Mild</td><td><input type="text" id="s2_demand_mg" placeholder="e.g., 1.5 MG"></td><td><input type="text" id="s2_demand_days" placeholder="e.g., 3 consecutive days"></td></tr>
+          <tr><td style="font-weight:600;background:#fef9c3">Stage 3 - Moderate</td><td><input type="text" id="s3_demand_mg" placeholder="Higher"></td><td><input type="text" id="s3_demand_days" placeholder=""></td></tr>
+          <tr><td style="font-weight:600;background:#fed7aa">Stage 4 - Severe</td><td><input type="text" id="s4_demand_mg" placeholder="Higher"></td><td><input type="text" id="s4_demand_days" placeholder=""></td></tr>
+          <tr><td style="font-weight:600;background:#fecaca">Stage 5 - Critical</td><td><input type="text" id="s5_demand_mg" placeholder="Higher"></td><td><input type="text" id="s5_demand_days" placeholder=""></td></tr>
+          <tr><td style="font-weight:600;background:#fca5a5">Stage 6 - Emergency</td><td><input type="text" id="s6_demand_mg" placeholder="Highest"></td><td><input type="text" id="s6_demand_days" placeholder=""></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="conditional" id="trigSupplyFields">
+    <div class="stage-trigger-box"><h4>&#128167; Available Supply Thresholds</h4>
+      <div class="form-group"><label>Supply threshold description</label><textarea id="supplyThreshold" placeholder="e.g., water supply is equal to or less than 500 acre feet"></textarea></div>
+    </div>
+  </div>
+
+  <div class="conditional" id="trigTankFields">
+    <div class="stage-trigger-box"><h4>&#9981;&#65039; Tank Level / Pressure Thresholds</h4>
+      <div class="row row-3">
+        <div class="form-group"><label>Tank Description</label><input type="text" id="tankDesc" placeholder="e.g., two elevated tanks"></div>
+        <div class="form-group"><label>Pressure (psi)</label><input type="text" id="tankPsi" placeholder="e.g., 35 psi"></div>
+        <div class="form-group"><label>Duration Below Threshold</label><input type="text" id="tankDuration" placeholder="e.g., 3 days"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conditional" id="trigReservoirFields">
+    <div class="stage-trigger-box"><h4>&#127754; Reservoir Level Thresholds</h4>
+      <div class="form-group"><label>Critical capacity percentage</label><input type="text" id="reservoirPct" placeholder="e.g., 40% of combined full capacity"></div>
+    </div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Stage Termination</div>
+  <div class="form-group"><label>Termination Method</label><select id="terminationMethod">
+    <option value="consecutive">Consecutive days of improved conditions</option><option value="weeks">After set weeks of implementation</option><option value="resolution">By official/council resolution</option><option value="combo">Combination</option>
+  </select></div>
+
+  <div class="sub-heading"><span class="diamond"></span> Customer Restrictions</div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="limitPoolUse" checked> Limit swimming pool filling/refilling?</label></div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="limitVehicleWash" checked> Limit vehicle washing?</label></div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="limitGolfCourse" checked> Include golf course watering restrictions?</label></div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="limitNewConnections" checked> Prohibit new connections during critical stages?</label></div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="includeAllocation" checked> Include Stage 7 Water Allocation with household limits?</label></div>
+  <div class="info-box">Stage 7 is the most restrictive response level. It shifts from broad conservation language into fixed household allocations, billing surcharges for overages, and tighter control of limited supply during severe shortage or emergency conditions.</div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goToStep(4)">&larr; Back</button>
+    <button class="btn btn-primary" onclick="goToStep(6)">Next: Enforcement &rarr;</button>
+  </div>
+</div>
+
+<!-- ====== STEP 6: Enforcement ====== -->
+<div class="section" id="step6">
+  <h2 class="section-title"><span class="diamond"></span> Enforcement &amp; Penalties</h2>
+  <p class="section-desc">Customize penalty amounts and enforcement provisions.</p>
+
+  <div class="sub-heading"><span class="diamond"></span> Violation Penalties</div>
+  <div class="row row-4">
+    <div class="form-group"><label>Reconnection Charge</label><input type="text" id="reconnectCharge" value="$150"></div>
+    <div class="form-group"><label>Minimum Court Fine</label><input type="text" id="minFine" value="$50"></div>
+    <div class="form-group"><label>Maximum Court Fine</label><input type="text" id="maxFine" value="$1,000"></div>
+    <div class="form-group"><label>False Reporting Fine</label><input type="text" id="falseReportFine" value="$75"></div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Custom Allocation Surcharge Tiers</div>
+  <div class="info-box">Customize the surcharge amounts for residential customers who exceed their allocation during Stage 7.</div>
+  <div class="row row-4">
+    <div class="form-group"><label>1st 1,000 gal over</label><input type="text" id="surcharge1" value="$50"></div>
+    <div class="form-group"><label>2nd 1,000 gal over</label><input type="text" id="surcharge2" value="$100"></div>
+    <div class="form-group"><label>3rd 1,000 gal over</label><input type="text" id="surcharge3" value="$250"></div>
+    <div class="form-group"><label>Each additional 1,000</label><input type="text" id="surcharge4" value="$500"></div>
+  </div>
+
+  <div class="sub-heading"><span class="diamond"></span> Custom Allocation Table (Gallons per Month)</div>
+  <div class="editable-hint">Editable section: adjust these monthly household allocation values to match adopted policy, local ordinance language, or operational constraints.</div>
+  <table class="year-table editable-table">
+    <thead><tr><th>Persons per Household</th><th>Gallons per Month</th></tr></thead>
+    <tbody>
+      <tr><td>1 or 2</td><td><input type="text" id="alloc_1_2" value="6,000"></td></tr>
+      <tr><td>3 or 4</td><td><input type="text" id="alloc_3_4" value="7,000"></td></tr>
+      <tr><td>5 or 6</td><td><input type="text" id="alloc_5_6" value="8,000"></td></tr>
+      <tr><td>7 or 8</td><td><input type="text" id="alloc_7_8" value="9,000"></td></tr>
+      <tr><td>9 or 10</td><td><input type="text" id="alloc_9_10" value="10,000"></td></tr>
+      <tr><td>11 or more</td><td><input type="text" id="alloc_11" value="12,000"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="sub-heading"><span class="diamond"></span> Waste of Water</div>
+  <div class="row row-2">
+    <div class="form-group"><label>Leak repair notice period (hours)</label><input type="text" id="leakRepairHours" value="72"></div>
+    <div class="form-group"><label>Maximum waste violation fine</label><input type="text" id="wasteFine" value="$500"></div>
+  </div>
+
+  <div class="form-group"><label>Type of Relief Sought <button type="button" class="inline-help" onclick="openHelpModal('relief')">?</button></label><select id="reliefType"><option value="punitive">Punitive</option><option value="injunctive">Injunctive</option><option value="punitive / injunctive">Both</option></select></div>
+
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="includeVariances" checked> Include Variances provision?<button type="button" class="inline-help" onclick="openHelpModal('variances')">?</button></label></div>
+  <div class="toggle-group"><label class="toggle-label"><input type="checkbox" id="includeSeverability" checked> Include Severability clause?<button type="button" class="inline-help" onclick="openHelpModal('severability')">?</button></label></div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goToStep(5)">&larr; Back</button>
+    <button class="btn btn-primary" onclick="goToStep(7)">Next: Education Calendar &rarr;</button>
+  </div>
+</div>
+
+<!-- ====== STEP 7: Education Calendar ====== -->
+<div class="section" id="step7">
+  <h2 class="section-title"><span class="diamond"></span> Seasonal Education Calendar</h2>
+  <p class="section-desc">Customize the seasonal education and outreach schedule. Default periods are pre-filled based on Oklahoma weather patterns.</p>
+
+  <div class="info-box">Adjust the month ranges and messaging focus for each seasonal education period. These will appear in Section III of the plan.</div>
+
+  <div class="stage-trigger-box" style="background:#eff6ff; border-color:#93c5fd">
+    <h4 style="color:#1e40af">&#10052;&#65039; Freeze Awareness Period</h4>
+    <div class="row row-2">
+      <div class="form-group"><label>Start Month</label><select id="freezeStart"><option value="January" selected>January</option><option value="February">February</option><option value="November">November</option><option value="December">December</option></select></div>
+      <div class="form-group"><label>End Month</label><select id="freezeEnd"><option value="February">February</option><option value="March" selected>March</option><option value="April">April</option></select></div>
+    </div>
+    <div class="check-grid">
+      <label><input type="checkbox" id="freeze_focus_1"> Pipe insulation</label>
+      <label><input type="checkbox" id="freeze_focus_2"> Drip faucet reminders</label>
+      <label><input type="checkbox" id="freeze_focus_3"> Shut-off valve awareness</label>
+      <label><input type="checkbox" id="freeze_focus_4"> Facility winterization</label>
+    </div>
+    <div class="form-group"><label>Other Focus Areas</label><input type="text" id="freezeFocus" value=""></div>
+  </div>
+
+  <div class="stage-trigger-box" style="background:#f0fdf4; border-color:#86efac">
+    <h4 style="color:#166534">&#127754; Flood Awareness Period</h4>
+    <div class="row row-2">
+      <div class="form-group"><label>Start Month</label><select id="floodStart"><option value="February">February</option><option value="March" selected>March</option><option value="April">April</option></select></div>
+      <div class="form-group"><label>End Month</label><select id="floodEnd"><option value="April">April</option><option value="May" selected>May</option><option value="June">June</option></select></div>
+    </div>
+    <div class="check-grid">
+      <label><input type="checkbox" id="flood_focus_1"> Emergency water supply</label>
+      <label><input type="checkbox" id="flood_focus_2"> Evacuation routes</label>
+      <label><input type="checkbox" id="flood_focus_3"> Source-water contamination awareness</label>
+      <label><input type="checkbox" id="flood_focus_4"> Conservation reminders</label>
+    </div>
+    <div class="form-group"><label>Other Focus Areas</label><input type="text" id="floodFocus" value=""></div>
+  </div>
+
+  <div class="stage-trigger-box" style="background:#fef9c3; border-color:#fde047">
+    <h4 style="color:#854d0e">&#9728;&#65039; Summer Usage Alerts</h4>
+    <div class="row row-2">
+      <div class="form-group"><label>Email Alert Start Month</label><select id="emailAlertMonth"><option value="May">May</option><option value="June" selected>June</option><option value="July">July</option></select></div>
+      <div class="form-group"><label>Other Focus Areas</label><input type="text" id="summerFocus" value=""></div>
+    </div>
+    <div class="check-grid">
+      <label><input type="checkbox" id="summer_focus_1"> High usage alerts</label>
+      <label><input type="checkbox" id="summer_focus_2"> Leak detection</label>
+      <label><input type="checkbox" id="summer_focus_3"> Irrigation efficiency</label>
+      <label><input type="checkbox" id="summer_focus_4"> Outdoor watering schedule</label>
+    </div>
+  </div>
+
+  <div class="stage-trigger-box" style="background:#fff7ed; border-color:#fdba74">
+    <h4 style="color:#9a3412">&#127777;&#65039; Drought Monitoring Period</h4>
+    <div class="row row-2">
+      <div class="form-group"><label>Start Month</label><select id="droughtStart"><option value="May">May</option><option value="June" selected>June</option><option value="July">July</option></select></div>
+      <div class="form-group"><label>End Month</label><select id="droughtEnd"><option value="August">August</option><option value="September" selected>September</option><option value="October">October</option></select></div>
+    </div>
+    <div class="check-grid">
+      <label><input type="checkbox" id="drought_focus_1"> Drought forecasts</label>
+      <label><input type="checkbox" id="drought_focus_2"> Watering restrictions</label>
+      <label><input type="checkbox" id="drought_focus_3"> High usage notifications</label>
+      <label><input type="checkbox" id="drought_focus_4"> Leak reporting and repair</label>
+    </div>
+    <div class="form-group"><label>Other Focus Areas</label><input type="text" id="droughtFocus" value=""></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goToStep(6)">&larr; Back</button>
+    <button class="btn btn-primary" onclick="goToStep(8)">Next: Appendices &rarr;</button>
+  </div>
+</div>
+
+<!-- ====== STEP 8: Appendices ====== -->
+<div class="section" id="step8">
+  <h2 class="section-title"><span class="diamond"></span> Appendices</h2>
+  <p class="section-desc">Select which appendices to include. Each contains best management practices for specific situations.</p>
+
+  <div class="appendix-card selected" id="appAcard"><label class="toggle-label"><input type="checkbox" id="includeAppA" checked onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix A: Water Conservation Tips</strong><br><span style="font-size:0.82rem;color:var(--text-light)">Bathroom, kitchen, laundry, appliance/plumbing, and outdoor use conservation tips.</span></div></label></div>
+  <div class="appendix-card selected" id="appBcard"><label class="toggle-label"><input type="checkbox" id="includeAppB" checked onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix B: Flood Preparation and Safety</strong><br><span style="font-size:0.82rem;color:var(--text-light)">Before, during, and after flood safety including emergency supplies.</span></div></label></div>
+  <div class="appendix-card selected" id="appCcard"><label class="toggle-label"><input type="checkbox" id="includeAppC" checked onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix C: Freeze Preparation and Safety</strong><br><span style="font-size:0.82rem;color:var(--text-light)">Pipe insulation, emergency prep, and thawing guidance.</span></div></label></div>
+  <div class="appendix-card selected" id="appDcard"><label class="toggle-label"><input type="checkbox" id="includeAppD" checked onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix D: Flood Resilience for Facilities</strong><br><span style="font-size:0.82rem;color:var(--text-light)">Floodplain evaluation, SCADA backup, generator planning.</span></div></label></div>
+  <div class="appendix-card selected" id="appEcard"><label class="toggle-label"><input type="checkbox" id="includeAppE" checked onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix E: Freeze Preparation for Facilities</strong><br><span style="font-size:0.82rem;color:var(--text-light)">27-item checklist for water management facility freeze prep.</span></div></label></div>
+  <div class="appendix-card selected" id="appFcard"><label class="toggle-label"><input type="checkbox" id="includeAppF" checked onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix F: Extreme Heat Preparation for Facilities</strong><br><span style="font-size:0.82rem;color:var(--text-light)">VFD inspection, A/C maintenance, exhaust fan checks.</span></div></label></div>
+  <div class="appendix-card" id="appGcard"><label class="toggle-label"><input type="checkbox" id="includeAppG" onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix G: Drought-Specific Best Management Practices</strong><br><span style="font-size:0.82rem;color:var(--text-light)">Extended drought response BMPs for facility operators and customers beyond general conservation.</span></div></label></div>
+  <div class="appendix-card selected" id="appHcard"><label class="toggle-label"><input type="checkbox" id="includeAppH" checked onchange="this.closest('.appendix-card').classList.toggle('selected',this.checked)"><div><strong>Appendix H: Outreach Kit</strong><br><span style="font-size:0.82rem;color:var(--text-light)">Editable flyer, social post, website notice, and mass-text drafts based on selected triggers and education methods.</span></div></label></div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goToStep(7)">&larr; Back</button>
+    <button class="btn btn-primary" onclick="goToStep(9)">Next: Generate Document &rarr;</button>
+  </div>
+</div>
+
+<!-- ====== STEP 9: Generate ====== -->
+<div class="section" id="step9">
+  <div class="final-section">
+    <div class="diamond" style="width:12px;height:12px;background:var(--cno-gold);transform:rotate(45deg);margin:0 auto 1rem"></div>
+    <h2>Ready to Generate Your Plan</h2>
+    <p>Review your entries using the navigation above. Click below to generate your Impact Response Plan as an editable document.</p>
+    <div class="compliance-card" style="max-width:760px;margin:0 auto 1rem;text-align:left;">
+      <strong style="display:block;margin-bottom:0.35rem;color:var(--cno-purple)">Use, ownership, and sovereignty notice</strong>
+      <div style="font-size:0.84rem;color:var(--text-light)">This generator is intended to support authorized impact response planning. The Choctaw Nation name, seal, and related marks remain protected. Generated documents are draft planning instruments until reviewed and approved through proper governance.</div>
+    </div>
+    <div class="compliance-card" style="max-width:760px;margin:0 auto 1rem;text-align:left;">
+      <strong style="display:block;margin-bottom:0.35rem;color:var(--cno-purple)">Enforceability notice</strong>
+      <div style="font-size:0.84rem;color:var(--text-light)">This generated plan is a draft document only and is not enforceable until it has been formally reviewed, adopted, and approved by the governing Board or Council through proper governance procedures. Do not distribute or rely upon this document as an active plan until Board/Council approval has been obtained and documented.</div>
+    </div>
+    <div id="previewSummary" style="text-align:left;max-width:600px;margin:0 auto 2rem;background:var(--cno-purple-bg);padding:1.5rem;border-radius:var(--radius);border:1px solid rgba(30,61,59,0.15);"></div>
+
+    <div class="export-btns">
+      <button class="btn btn-generate" onclick="generateDocument('doc')">&#128196; Generate Word Document (.doc)</button>
+      <button class="btn btn-generate" style="background:var(--cno-gold);color:#1E3D3B" onclick="generateOutreachKit('doc')">&#128227; Generate Outreach Kit (.doc)</button>
+    </div>
+
+    <div class="minor-actions">
+      <button class="btn btn-tertiary" onclick="exportJsonBackup()">Export JSON Backup</button>
+      <button class="btn btn-tertiary" onclick="document.getElementById('jsonRestore').click()">Import JSON Backup</button>
+      <input type="file" id="jsonRestore" accept="application/json" style="display:none" onchange="importJsonBackup(event)">
+    </div>
+
+    <div id="status-msg"></div>
+    <p style="margin-top:1.2rem;font-size:0.82rem;color:var(--text-light);">Word format opens in Microsoft Word, LibreOffice, or Google Docs for final review and editing before adoption.</p>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="modal-backdrop" id="helpModal" onclick="if(event.target===this) closeHelpModal()">
+  <div class="modal-card">
+    <h3 id="helpModalTitle">Help</h3>
+    <div id="helpModalBody"></div>
+    <div class="btn-row" style="margin-top:1rem;"><span></span><button class="btn btn-primary" type="button" onclick="closeHelpModal()">Close</button></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-diamonds" aria-hidden="true">
+    <span class="diamond-accent outline-gold" style="--size: 56px; left: 4.5%; top: 30px; --opacity: 0.18;"></span>
+    <span class="diamond-accent solid-gold" style="--size: 44px; left: 7.8%; top: 34px; --opacity: 0.20;"></span>
+    <span class="diamond-accent solid-green" style="--size: 40px; left: 10.2%; top: 54px; --opacity: 0.24;"></span>
+    <span class="diamond-accent solid-gold-deep" style="--size: 14px; right: 8.5%; top: 36px; --opacity: 0.20;"></span>
+    <span class="diamond-accent solid-green" style="--size: 16px; right: 5.8%; top: 58px; --opacity: 0.18;"></span>
+  </div>
+  <img class="footer-seal" data-seal="true" src="HeroImage_CH.png" alt="Choctaw Nation seal" onerror="handleSealLoadError(this)">
+  <div class="legal-mini">
+    <strong style="color:#1E3D3B;">&copy; 2026 Choctaw Nation of Oklahoma. All rights reserved.</strong><br>
+    <strong style="color:#1E3D3B;">Choctaw Nation of Oklahoma</strong> <span style="color:#76B900;font-weight:600;">Environmental Protection Service</span><br>
+    <span style="color:#1E3D3B;font-weight:500;">Office of Water Resource Management</span><br><br>
+    This software is intended solely to assist authorized personnel with drafting impact response plans for water system preparedness, emergency coordination, continuity planning, and related internal governmental or utility purposes.<br>
+    No license or transfer of rights is granted by possession, download, or use of this file. The Choctaw Nation name, seal, logos, slogans, emblems, trademarks, service marks, and other identifying indicia remain property of the Choctaw Nation of Oklahoma and may not be copied, redistributed, republished, sold, relicensed, or used for commercial or public branding purposes without prior written authorization.<br>
+    Nothing in this software or any generated output shall be interpreted to waive, diminish, or surrender tribal sovereignty, sovereign immunity, governmental authority, jurisdiction, cultural property rights, or any other rights, protections, privileges, or remedies of the Choctaw Nation of Oklahoma.<br>
+    Generated plans should be reviewed by authorized leadership, legal, compliance, and operational personnel before adoption or external distribution.<br><br>
+    <span style="color:#1E3D3B;font-weight:700;">Impact Response Plan Generator v3.7</span> <span style="color:#76B900;">&#9670;</span> Internal-use planning tool
+    <br><span style="font-size:0.68rem;color:#999;letter-spacing:0.05em;margin-top:4px;display:inline-block;">FAITH &#10022; FAMILY &#10022; CULTURE</span>
+  </div>
+</div>
+
+<!-- CNO EPS Shared Data Bridge — stable cross-app integration layer -->
+<script>
+(function(){
+  "use strict";
+  var K="cno-eps-owrm-bridge",CH="cno-eps-bridge-sync",SV=1;
+  function jp(r,f){try{return r?JSON.parse(r):f}catch(e){return f}}
+  function rr(){try{return jp(localStorage.getItem(K),null)}catch(e){return null}}
+  function wr(d){try{localStorage.setItem(K,JSON.stringify(d));try{if(typeof BroadcastChannel!=="undefined"){var b=new BroadcastChannel(CH);b.postMessage({key:K,ts:Date.now()});b.close()}}catch(e){}return true}catch(e){return false}}
+  function es(b){if(!b||typeof b!=="object")b={};if(typeof b.bridgeSchemaVersion!=="number")b.bridgeSchemaVersion=SV;if(!b.publishers)b.publishers={};if(!b.org)b.org={};if(!b.org.contacts)b.org.contacts={};if(!Array.isArray(b.facilities))b.facilities=[];if(!Array.isArray(b.storage))b.storage=[];if(!b.capacity)b.capacity={};if(!b.systemHealth)b.systemHealth={};if(!b.forecast)b.forecast={};return b}
+  function rb(){return es(rr())}
+  function rs(s,fb){var b=rb();var v=b[s];if(v===undefined||v===null)return fb!==undefined?fb:null;if(Array.isArray(v)&&v.length===0&&fb!==undefined)return fb;if(typeof v==="object"&&!Array.isArray(v)&&Object.keys(v).length===0&&fb!==undefined)return fb;return v}
+  function ps(ai,an,av,s,d){let b=rb();b[s]=d;b.lastUpdated=new Date().toISOString();b.publishers[ai]={appName:an,appVersion:av,publishedAt:new Date().toISOString()};return wr(b)}
+  function pm(ai,an,av,ss){let b=rb();Object.keys(ss).forEach(function(k){b[k]=ss[k]});b.lastUpdated=new Date().toISOString();b.publishers[ai]={appName:an,appVersion:av,publishedAt:new Date().toISOString()};return wr(b)}
+  function cp(ai){let b=rb();let p=b.publishers[ai];if(p&&p.publishedAt)return{available:true,appName:p.appName||null,publishedAt:p.publishedAt};return{available:false,appName:null,publishedAt:null}}
+  function hd(){let b=rb();return Object.keys(b.publishers).length>0}
+  function ou(cb){if(typeof BroadcastChannel==="undefined")return function(){};var bc=new BroadcastChannel(CH);bc.onmessage=function(e){if(e.data&&e.data.key===K)cb()};function os(e){if(e.key===K)cb()}window.addEventListener("storage",os);return function(){bc.close();window.removeEventListener("storage",os)}}
+  function clr(){try{localStorage.removeItem(K);return true}catch(e){return false}}
+  window.CNOBridge={read:rb,readSection:rs,checkPublisher:cp,hasBridgeData:hd,publishSection:ps,publishMultiple:pm,onBridgeUpdate:ou,clearBridge:clr,getBridgeKey:function(){return K},getSchemaVersion:function(){return SV},BRIDGE_KEY:K,SCHEMA_VERSION:SV};
+})();
+</script>
+
+<script>
+// ============ STATE ============
+let currentStep = 1;
+const TOTAL_STEPS = 9;
+const STORAGE_KEY = 'irp_generator_save';
+const SEAL_LOCAL = 'HeroImage_CH.png';
+const APP_VERSION = '3.8';
+let embeddedSealDataUrl = null;
+
+// ============ NAVIGATION ============
+function goToStep(n) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('step' + n).classList.add('active');
+  document.querySelectorAll('.progress-step').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active','completed');
+    if (s === n) el.classList.add('active');
+    else if (s < n) el.classList.add('completed');
+  });
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === TOTAL_STEPS) buildPreview();
+}
+
+function toggleConditional(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('show', show);
+}
+
+function parseNumeric(val) {
+  const cleaned = String(val || '').replace(/,/g,'').replace(/\$/g,'').trim();
+  const num = parseFloat(cleaned);
+  return Number.isFinite(num) ? num : 0;
+}
+function formatNumber(num, digits=0) {
+  if (!Number.isFinite(num) || num <= 0) return 'Not entered';
+  return new Intl.NumberFormat('en-US', {maximumFractionDigits: digits, minimumFractionDigits: digits}).format(num);
+}
+function addFacilityRow(name='', location='') {
+  const host = document.getElementById('facilityRepeater');
+  if (!host) return;
+  const row = document.createElement('div');
+  row.className = 'repeat-row';
+  row.innerHTML = `<button type="button" class="remove-row" onclick="this.parentElement.remove(); syncFacilitiesField();">Remove</button>
+    <div class="row row-2" style="margin-bottom:0;">
+      <div class="form-group"><label>Facility / Pump Station Name</label><input type="text" class="facility-name" placeholder="e.g., Plant No. 1, Booster Station A" value="${name.replace(/"/g,'&quot;')}"></div>
+      <div class="form-group"><label>Location</label><input type="text" class="facility-location" placeholder="Physical location or area served" value="${location.replace(/"/g,'&quot;')}"></div>
+    </div>`;
+  host.appendChild(row);
+  row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', syncFacilitiesField));
+  syncFacilitiesField();
+}
+function syncFacilitiesField() {
+  const rows = [...document.querySelectorAll('#facilityRepeater .repeat-row')].map(row => ({
+    name: row.querySelector('.facility-name')?.value?.trim() || '',
+    location: row.querySelector('.facility-location')?.value?.trim() || ''
+  })).filter(r => r.name || r.location);
+  const hidden = document.getElementById('facilities');
+  if (hidden) hidden.value = JSON.stringify(rows);
+}
+function getFacilitiesList() {
+  try {
+    const raw = document.getElementById('facilities')?.value || '[]';
+    const items = JSON.parse(raw);
+    return Array.isArray(items) ? items : [];
+  } catch { return []; }
+}
+let supplyDemandManual = false;
+let futureGrowthManual = false;
+let capacityMoratoriumManual = false;
+const growthFieldMap = {
+  growth_pop: 'growth_pop_pct',
+  growth_commercial: 'growth_commercial_pct',
+  growth_industrial: 'growth_industrial_pct',
+  growth_systemloss: 'growth_systemloss_pct',
+  growth_drought: 'growth_drought_pct',
+  growth_wholesale: 'growth_wholesale_pct'
+};
+function getCheckedGrowthPct() {
+  let total = parseNumeric(v('growthCustomPct'));
+  Object.entries(growthFieldMap).forEach(([checkId, fieldId]) => {
+    if (c(checkId)) total += parseNumeric(v(fieldId));
+  });
+  return total;
+}
+function getSelectedGrowthDrivers(horizonYears) {
+  const labels = {
+    growth_pop: 'population / residential growth',
+    growth_commercial: 'commercial expansion',
+    growth_industrial: 'industrial growth',
+    growth_systemloss: 'water loss planning adjustment',
+    growth_drought: 'drought / supply stress adjustment',
+    growth_wholesale: 'wholesale / other system demand growth'
+  };
+  const drivers = [];
+  Object.entries(labels).forEach(([checkId, label]) => {
+    if (c(checkId)) drivers.push(`${label} (${formatNumber(parseNumeric(v(growthFieldMap[checkId])),1)}% total over ${horizonYears} years)`);
+  });
+  const custom = parseNumeric(v('growthCustomPct'));
+  if (custom > 0) drivers.push(`custom growth assumption (${formatNumber(custom,1)}% total over ${horizonYears} years)`);
+  return drivers;
+}
+function getCapacityThresholds() {
+  return {
+    review: parseNumeric(v('capacityReviewThreshold')) || 80,
+    restriction: parseNumeric(v('capacityRestrictionThreshold')) || 50,
+    moratorium: parseNumeric(v('capacityMoratoriumThreshold')) || 50
+  };
+}
+function getAnnualSystemCapacityGallons() {
+  const gpm = parseNumeric(v('surfaceWaterGpm'));
+  return gpm > 0 ? gpm * 60 * 24 * 365 : 0;
+}
+function getCapacityPercent(usage, capacity) {
+  return usage > 0 && capacity > 0 ? (usage / capacity) * 100 : 0;
+}
+function reconcileWaterUseRows() {
+  const issues = [];
+  const completed = [];
+  const focused = document.activeElement;
+  for (let i=1;i<=5;i++) {
+    const producedEl = document.getElementById(`yr${i}_produced`);
+    const meteredEl = document.getElementById(`yr${i}_metered`);
+    const nonEl = document.getElementById(`yr${i}_nonmetered`);
+    const yearLabel = v(`yr${i}_year`) || `Row ${i}`;
+    if (!producedEl || !meteredEl || !nonEl) continue;
+    // Skip auto-calc for the row that the user is actively editing
+    if (focused === producedEl || focused === meteredEl || focused === nonEl) continue;
+    const produced = parseNumeric(producedEl.value);
+    const metered = parseNumeric(meteredEl.value);
+    const non = parseNumeric(nonEl.value);
+    const hasProduced = producedEl.value.trim() !== '';
+    const hasMetered = meteredEl.value.trim() !== '';
+    const hasNon = nonEl.value.trim() !== '';
+    if (hasProduced && hasMetered && !hasNon) {
+      const calc = produced - metered;
+      if (calc >= 0) { nonEl.value = formatNumber(calc); completed.push(`${yearLabel}: non-metered auto-calculated`); }
+      else issues.push(`${yearLabel}: produced is less than metered.`);
+    } else if (hasProduced && hasNon && !hasMetered) {
+      const calc = produced - non;
+      if (calc >= 0) { meteredEl.value = formatNumber(calc); completed.push(`${yearLabel}: metered auto-calculated`); }
+      else issues.push(`${yearLabel}: produced is less than non-metered.`);
+    } else if (hasMetered && hasNon && !hasProduced) {
+      const calc = metered + non;
+      producedEl.value = formatNumber(calc); completed.push(`${yearLabel}: produced auto-calculated`);
+    } else if (hasProduced && hasMetered && hasNon) {
+      const expected = produced - metered;
+      const tolerance = 1;
+      if (expected < 0) issues.push(`${yearLabel}: produced is less than metered.`);
+      else if (Math.abs(expected - non) > tolerance) issues.push(`${yearLabel}: produced, metered, and non-metered do not reconcile.`);
+    }
+  }
+  const summary = document.getElementById('waterUseSummary');
+  const alert = document.getElementById('waterUseAlert');
+  if (summary) summary.textContent = completed.length ? completed.join(' • ') : 'Enter any two values in a row and the third will auto-calculate when possible.';
+  if (alert) {
+    if (issues.length) {
+      alert.className = 'alert-card warn show';
+      alert.textContent = issues.join(' ');
+    } else if (completed.length) {
+      alert.className = 'alert-card good show';
+      alert.textContent = 'Water use rows reconciled successfully.';
+    } else {
+      alert.className = 'alert-card';
+      alert.textContent = '';
+    }
+  }
+}
+function buildFutureGrowthNarrative(avgProduced, projectedDemand, horizonYears) {
+  const drivers = getSelectedGrowthDrivers(horizonYears);
+  const notes = v('futureGrowthNotes');
+  if (!avgProduced) return 'Enter recent water produced values to generate a growth narrative.';
+  let text = `Using average annual produced water of approximately ${formatNumber(avgProduced)} gallons as the baseline, ${WP || 'the provider'} is planning for a ${horizonYears}-year demand outlook.`;
+  if (drivers.length) text += ` Selected planning growth factors include ${drivers.join(', ')}.`;
+  else text += ' No specific growth drivers are currently selected beyond any manually entered notes.';
+  if (projectedDemand) text += ` Based on those assumptions, projected annual demand is approximately ${formatNumber(projectedDemand)} gallons by the end of the planning horizon.`;
+  if (notes) text += ` Planning notes: ${notes}.`;
+  return text;
+}
+function buildSupplyDemandNarrative(avgProduced, permittedAmount, projectedDemand, horizonYears, annualCapacity, currentCapacityPct, projectedCapacityPct, thresholds) {
+  const notes = v('futureGrowthNotes');
+  if (!avgProduced) return 'Enter at least one year of water produced data to generate a projected supply-and-demand balance.';
+  let autoText = `Projected annual demand is approximately ${formatNumber(projectedDemand)} gallons based on average recent production and selected growth assumptions over ${horizonYears} years.`;
+  if (permittedAmount) {
+    const diff = permittedAmount - projectedDemand;
+    if (projectedDemand > permittedAmount) {
+      autoText += ` This exceeds the entered permitted amount of ${formatNumber(permittedAmount)} gallons by about ${formatNumber(Math.abs(diff))} gallons per year. Review additional permitting, capacity expansion, interconnection strategy, demand management, or phased growth controls.`;
+    } else {
+      autoText += ` Compared with the entered permitted amount of ${formatNumber(permittedAmount)} gallons, the current planning margin is about ${formatNumber(diff)} gallons per year.`;
+    }
+  } else {
+    autoText += ' No total permitted amount was entered, so staff should compare this projected demand against permitted supply, production limits, treatment capacity, and source reliability during final review.';
+  }
+  if (annualCapacity) {
+    autoText += ` Using the entered maximum system capacity, the system is currently operating at about ${formatNumber(currentCapacityPct,1)}% of annual treatment capacity and is projected to reach about ${formatNumber(projectedCapacityPct,1)}% within the planning horizon.`;
+    if (projectedCapacityPct >= thresholds.moratorium) {
+      autoText += ` That meets or exceeds the current meter / growth moratorium threshold of ${formatNumber(thresholds.moratorium,1)}%, so the provider should consider suspending new meters, service extensions, and other growth approvals until additional capacity or supply is secured.`;
+    } else if (projectedCapacityPct >= thresholds.restriction) {
+      autoText += ` That reaches the capacity restriction threshold of ${formatNumber(thresholds.restriction,1)}%, so new growth approvals should be reviewed carefully and conditioned on remaining treatment and supply margin.`;
+    } else if (projectedCapacityPct >= thresholds.review) {
+      autoText += ` That reaches the capacity review threshold of ${formatNumber(thresholds.review,1)}%, so staff should begin active review of additional meters, service extensions, and plant expansion timing.`;
+    } else {
+      autoText += ' Capacity remains below the current review threshold based on the values entered, but it should still be monitored routinely.';
+    }
+  } else {
+    autoText += ' Enter Maximum System Capacity (gpm) to calculate percent of plant capacity currently used and projected to be used.';
+  }
+  if (notes) autoText += ` Additional planning notes: ${notes}.`;
+  return autoText;
+}
+function buildCapacityMoratoriumNarrative(avgProduced, projectedDemand, horizonYears, annualCapacity, currentCapacityPct, projectedCapacityPct, thresholds) {
+  if (!avgProduced) return 'Enter at least one year of water produced data to generate plant-capacity and moratorium language.';
+  if (!annualCapacity) return 'Enter Maximum System Capacity (gpm) to generate plant-capacity and meter / growth moratorium language.';
+  let text = `Based on the entered maximum system capacity, the system has an estimated annual treatment capacity of approximately ${formatNumber(annualCapacity)} gallons per year. Current average production uses about ${formatNumber(currentCapacityPct,1)}% of that capacity, and projected demand uses about ${formatNumber(projectedCapacityPct,1)}% over the ${horizonYears}-year planning horizon.`;
+  text += ` The provider should begin formal capacity review at ${formatNumber(thresholds.review,1)}% of capacity, evaluate growth restrictions and case-by-case meter approvals at ${formatNumber(thresholds.restriction,1)}%, and consider a temporary meter / growth moratorium at ${formatNumber(thresholds.moratorium,1)}% unless additional treatment capacity, storage, supply, or other documented mitigation is in place.`;
+  if (projectedCapacityPct >= thresholds.moratorium) {
+    text += ' Based on the current calculation, the projected demand reaches or exceeds the moratorium threshold, so approval of additional meters, service extensions, or growth commitments should not occur without governing-body review and documented capacity justification.';
+  } else if (projectedCapacityPct >= thresholds.restriction) {
+    text += ' Based on the current calculation, the projected demand reaches the restriction threshold, so additional meters or growth commitments should be closely limited and individually reviewed.';
+  } else if (projectedCapacityPct >= thresholds.review) {
+    text += ' Based on the current calculation, the projected demand reaches the review threshold, so plant planning, meter tracking, and expansion timing should be actively monitored.';
+  } else {
+    text += ' Based on the current calculation, projected demand remains below the review threshold, but this should be revisited whenever major growth, drought stress, or treatment limitations change.';
+  }
+  return text;
+}
+function updateSupplyDemandCalculator(forceRewrite = false) {
+  reconcileWaterUseRows();
+  let producedVals = [];
+  for (let i=1;i<=5;i++) {
+    const p = parseNumeric(v(`yr${i}_produced`)); if (p>0) producedVals.push(p);
+  }
+  const avgProduced = producedVals.length ? producedVals.reduce((a,b)=>a+b,0)/producedVals.length : 0;
+  const permittedAmount = parseNumeric(v('totalPermittedAmount'));
+  const growthPct = getCheckedGrowthPct();
+  const horizonYears = Math.max(1, parseNumeric(v('growthProjectionYears')) || 10);
+  const annualRate = growthPct / 100 / horizonYears;
+  const projectedDemand = avgProduced ? avgProduced * Math.pow(1 + annualRate, horizonYears) : 0;
+  const annualCapacity = getAnnualSystemCapacityGallons();
+  const currentCapacityPct = getCapacityPercent(avgProduced, annualCapacity);
+  const projectedCapacityPct = getCapacityPercent(projectedDemand, annualCapacity);
+  const thresholds = getCapacityThresholds();
+  const avgProducedDisplay = document.getElementById('avgProducedDisplay');
+  const growthPctDisplay = document.getElementById('growthPctDisplay');
+  const projectedDemandDisplay = document.getElementById('projectedDemandDisplay');
+  const annualCapacityDisplay = document.getElementById('annualCapacityDisplay');
+  const currentCapacityUsedDisplay = document.getElementById('currentCapacityUsedDisplay');
+  const projectedCapacityUsedDisplay = document.getElementById('projectedCapacityUsedDisplay');
+  const avgPermittedDisplay = document.getElementById('avgPermittedDisplay');
+  if (avgProducedDisplay) avgProducedDisplay.textContent = avgProduced ? formatNumber(avgProduced) + ' gal/yr' : 'Not calculated yet';
+  if (growthPctDisplay) growthPctDisplay.textContent = formatNumber(growthPct,1) + '% total over ' + horizonYears + ' years';
+  if (projectedDemandDisplay) projectedDemandDisplay.textContent = projectedDemand ? formatNumber(projectedDemand) + ' gal/yr' : 'Not calculated yet';
+  if (annualCapacityDisplay) annualCapacityDisplay.textContent = annualCapacity ? formatNumber(annualCapacity) + ' gal/yr' : 'Not entered';
+  if (currentCapacityUsedDisplay) currentCapacityUsedDisplay.textContent = annualCapacity && avgProduced ? formatNumber(currentCapacityPct,1) + '%' : 'Not calculated yet';
+  if (projectedCapacityUsedDisplay) projectedCapacityUsedDisplay.textContent = annualCapacity && projectedDemand ? formatNumber(projectedCapacityPct,1) + '%' : 'Not calculated yet';
+  if (avgPermittedDisplay) avgPermittedDisplay.textContent = permittedAmount ? formatNumber(permittedAmount) + ' gal/yr' : 'Not entered';
+  const alert = document.getElementById('supplyDemandAlert');
+  if (alert) {
+    const messages = [];
+    let severity = 'good';
+    if (!avgProduced) {
+      severity = 'warn';
+      messages.push('Enter at least one year of water produced data to generate the planning comparison.');
+    } else {
+      if (annualCapacity) {
+        if (projectedCapacityPct >= thresholds.moratorium) {
+          severity = 'danger';
+          messages.push(`\u26a0 ALERT: Projected demand reaches ${formatNumber(projectedCapacityPct,1)}% of annual system capacity, which meets or exceeds the meter / growth moratorium threshold of ${formatNumber(thresholds.moratorium,1)}%. Immediate action required.`);
+        } else if (projectedCapacityPct >= thresholds.restriction) {
+          severity = 'danger';
+          messages.push(`\u26a0 ALERT: Projected demand reaches ${formatNumber(projectedCapacityPct,1)}% of annual system capacity, which meets the capacity restriction threshold of ${formatNumber(thresholds.restriction,1)}%. Review growth approvals and capacity planning.`);
+        } else if (projectedCapacityPct >= thresholds.review) {
+          severity = 'warn';
+          messages.push(`Projected demand reaches ${formatNumber(projectedCapacityPct,1)}% of annual system capacity, which meets the capacity review threshold.`);
+        } else {
+          messages.push('Projected demand remains below the current capacity review threshold based on the values entered.');
+        }
+        if (currentCapacityPct >= thresholds.restriction) {
+          severity = 'danger';
+          messages.push(`\u26a0 CURRENT usage is already at ${formatNumber(currentCapacityPct,1)}% of capacity (restriction threshold: ${formatNumber(thresholds.restriction,1)}%). Consider updating permit or expanding capacity now.`);
+        } else if (currentCapacityPct >= thresholds.review) {
+          if (severity !== 'danger') severity = 'warn';
+          messages.push(`Current usage is at ${formatNumber(currentCapacityPct,1)}% of capacity, reaching the review threshold.`);
+        }
+      } else {
+        severity = 'warn';
+        messages.push('Enter Maximum System Capacity (gpm) to evaluate current and projected plant-capacity use.');
+      }
+      if (permittedAmount) {
+        if (projectedDemand > permittedAmount) {
+          severity = 'danger';
+          messages.push('\u26a0 ALERT: Projected demand exceeds the entered permitted amount. Additional permitted water, permit update, or other mitigation is needed.');
+        } else {
+          messages.push('Projected demand remains within the entered permitted amount based on current planning assumptions.');
+        }
+      } else {
+        severity = 'warn';
+        messages.push('Enter a total permitted amount to evaluate permitting headroom.');
+      }
+    }
+    alert.className = `alert-card ${severity} show`;
+    alert.textContent = messages.join(' ');
+  }
+  const futureGrowthTarget = document.getElementById('futureGrowth');
+  const supplyTarget = document.getElementById('supplyDemandBalance');
+  const capacityTarget = document.getElementById('capacityMoratoriumPlan');
+  if (futureGrowthTarget && (!futureGrowthManual || forceRewrite) && document.activeElement !== futureGrowthTarget) {
+    futureGrowthTarget.value = buildFutureGrowthNarrative(avgProduced, projectedDemand, horizonYears);
+  }
+  if (supplyTarget && (!supplyDemandManual || forceRewrite) && document.activeElement !== supplyTarget) {
+    supplyTarget.value = buildSupplyDemandNarrative(avgProduced, permittedAmount, projectedDemand, horizonYears, annualCapacity, currentCapacityPct, projectedCapacityPct, thresholds);
+  }
+  if (capacityTarget && (!capacityMoratoriumManual || forceRewrite) && document.activeElement !== capacityTarget) {
+    capacityTarget.value = buildCapacityMoratoriumNarrative(avgProduced, projectedDemand, horizonYears, annualCapacity, currentCapacityPct, projectedCapacityPct, thresholds);
+  }
+}
+function regenerateSupplyDemandBalance() {
+  supplyDemandManual = false;
+  updateSupplyDemandCalculator(true);
+}
+function regenerateGrowthNarrative() {
+  futureGrowthManual = false;
+  updateSupplyDemandCalculator(true);
+}
+function regenerateCapacityMoratoriumPlan() {
+  capacityMoratoriumManual = false;
+  updateSupplyDemandCalculator(true);
+}
+function getPublicInputMethods() {
+  const parts = [];
+  if (c('pi_publicMeeting')) parts.push('public meeting');
+  if (c('pi_notice')) parts.push('public notice');
+  if (c('pi_hearing')) parts.push('formal hearing');
+  if (c('pi_boardInput')) parts.push('board or council input');
+  if (c('pi_customerComments')) parts.push('customer comments');
+  if (c('pi_online')) parts.push('website or online posting');
+  if (c('pi_social')) parts.push('social media outreach');
+  if (c('pi_other_check')) parts.push('other documented outreach');
+  const detail = v('publicInputMethod');
+  if (detail) parts.push(detail);
+  return parts;
+}
+function getSeasonFocusText(prefix, manualId) {
+  const map = {
+    freeze: {'freeze_focus_1':'Pipe insulation','freeze_focus_2':'Drip faucet reminders','freeze_focus_3':'Shut-off valve awareness','freeze_focus_4':'Facility winterization'},
+    flood: {'flood_focus_1':'Emergency water supply','flood_focus_2':'Evacuation routes','flood_focus_3':'Source-water contamination awareness','flood_focus_4':'Conservation reminders'},
+    summer: {'summer_focus_1':'High usage alerts','summer_focus_2':'Leak detection','summer_focus_3':'Irrigation efficiency','summer_focus_4':'Outdoor watering schedule'},
+    drought: {'drought_focus_1':'Drought forecasts','drought_focus_2':'Watering restrictions','drought_focus_3':'High usage notifications','drought_focus_4':'Leak reporting and repair'}
+  };
+  const labels = map[prefix] || {};
+  const vals = Object.entries(labels).filter(([id]) => c(id)).map(([,label]) => label);
+  const manual = v(manualId);
+  if (manual) vals.push(manual);
+  return vals.join(', ') || '[focus areas]';
+}
+const helpContent = {
+  ordinance: {
+    title: 'Adopted pursuant to a specific ordinance',
+    body: '<p>Use this when the plan is being formally adopted under a municipal ordinance, trust authority, code section, or similar governing action.</p><ul><li><strong>Why it matters:</strong> it ties the plan to the authority that makes it enforceable.</li><li><strong>What to enter:</strong> the ordinance number, resolution, or code section that authorizes adoption.</li><li><strong>When not to use it:</strong> if the plan is only an internal draft and has not been formally adopted yet.</li></ul>'
+  },
+  relief: {
+    title: 'Type of Relief Sought',
+    body: '<p>This identifies the remedy the provider may seek for violations.</p><ul><li><strong>Punitive:</strong> fines, penalties, or other punishment.</li><li><strong>Injunctive:</strong> court-ordered action or compliance.</li><li><strong>Both:</strong> keeps both enforcement paths available.</li></ul><p>Most plans keep both unless counsel wants the language narrowed.</p>'
+  },
+  variances: {
+    title: 'Variances',
+    body: '<p>A variance clause allows the governing body to grant limited written exceptions when strict compliance is not technically possible or another method achieves the same conservation outcome.</p><p>That keeps the plan flexible enough to handle unusual situations without undermining the overall conservation framework.</p>'
+  },
+  severability: {
+    title: 'Severability clause',
+    body: '<p>A severability clause says that if one section of the plan is struck down or becomes unenforceable, the rest of the plan stays in effect.</p><p>It is a low-cost legal safeguard and generally recommended to keep.</p>'
+  }
+};
+function openHelpModal(key) {
+  const modal = document.getElementById('helpModal');
+  const item = helpContent[key];
+  if (!modal || !item) return;
+  document.getElementById('helpModalTitle').textContent = item.title;
+  document.getElementById('helpModalBody').innerHTML = item.body;
+  modal.classList.add('show');
+}
+function closeHelpModal() {
+  document.getElementById('helpModal')?.classList.remove('show');
+}
+
+// ============ LOGO PREVIEW ============
+let logoDataUrl = null;
+function previewLogo(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    logoDataUrl = e.target.result;
+    const img = document.getElementById('logoPreview');
+    img.src = logoDataUrl;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ============ SAVE / LOAD ============
+function getAllFieldIds() {
+  const ids = [];
+  document.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"], textarea, select').forEach(el => {
+    if (el.id) ids.push(el.id);
+  });
+  return ids;
+}
+
+function getAllCheckboxIds() {
+  const ids = [];
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+    if (el.id) ids.push(el.id);
+  });
+  return ids;
+}
+
+function saveProgress() {
+  const data = { version: APP_VERSION, savedAt: new Date().toISOString(), ...collectFormData() };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const ind = document.getElementById('saveIndicator');
+  ind.textContent = '\u2713 Saved ' + new Date().toLocaleTimeString();
+  ind.classList.add('saved');
+  setTimeout(() => { ind.classList.remove('saved'); }, 3000);
+}
+
+function loadProgress() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) { alert('No saved progress found.'); return; }
+  try {
+    const data = JSON.parse(raw);
+    applyFormData(data);
+    // Trigger conditional visibility
+    ['hasWastewater','hasReclaimedWater','hasWholesale','hasOrdinance',
+     'trig_demand','trig_supply','trig_tank','trig_reservoir','deqServiceAreaSpecific'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.dispatchEvent(new Event('change'));
+    });
+    document.querySelectorAll('.appendix-card input[type="checkbox"]').forEach(cb => {
+      cb.closest('.appendix-card').classList.toggle('selected', cb.checked);
+    });
+    if (data.step) goToStep(data.step);
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = '\u2713 Loaded from ' + new Date(data.savedAt).toLocaleString();
+    ind.classList.add('saved');
+  } catch(e) { alert('Error loading save: ' + e.message); }
+}
+
+function clearProgress() {
+  if (confirm('Are you sure you want to clear all saved progress? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    document.getElementById('saveIndicator').textContent = '\u25cf Cleared';
+  }
+}
+
+
+
+function exportJsonBackup() {
+  const data = { version: APP_VERSION, exportedAt: new Date().toISOString(), sealFile: SEAL_LOCAL, payload: collectFormData() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  downloadBlob(blob, safeName() + '_IRP_Backup.json');
+}
+
+function importJsonBackup(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const raw = JSON.parse(e.target.result);
+      const data = raw.payload || raw;
+      applyFormData(data);
+      showStatus('success', 'JSON backup imported successfully.');
+    } catch (err) {
+      showStatus('error', 'Could not import JSON backup: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function collectFormData() {
+  const data = { step: currentStep, fields: {}, checks: {}, logo: logoDataUrl };
+  getAllFieldIds().forEach(id => { data.fields[id] = document.getElementById(id).value; });
+  getAllCheckboxIds().forEach(id => { data.checks[id] = document.getElementById(id).checked; });
+  return data;
+}
+
+function applyFormData(data) {
+  Object.entries((data && data.fields) || {}).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  Object.entries((data && data.checks) || {}).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.checked = !!val;
+      el.dispatchEvent(new Event('change'));
+    }
+  });
+  if (data && data.logo) {
+    logoDataUrl = data.logo;
+    const img = document.getElementById('logoPreview');
+    img.src = logoDataUrl;
+    img.style.display = 'block';
+  }
+  if (data && data.fields && data.fields.facilities) {
+    try {
+      const items = JSON.parse(data.fields.facilities || '[]');
+      const host = document.getElementById('facilityRepeater');
+      if (host) host.innerHTML = '';
+      if (Array.isArray(items) && items.length) items.forEach(item => addFacilityRow(item.name || '', item.location || ''));
+    } catch {}
+  }
+  syncFacilitiesField();
+  supplyDemandManual = false;
+  futureGrowthManual = false;
+  capacityMoratoriumManual = false;
+  if (data && data.step) goToStep(data.step);
+  updateSupplyDemandCalculator(true);
+}
+
+function showStatus(kind, message) {
+  const statusEl = document.getElementById('status-msg');
+  if (!statusEl) return;
+  statusEl.className = kind;
+  statusEl.textContent = message;
+}
+
+function resolveSealSrc() {
+  return embeddedSealDataUrl || SEAL_LOCAL;
+}
+
+function handleSealLoadError(img) {
+  img.style.display = 'none';
+  const statusEl = document.getElementById('status-msg');
+  if (statusEl && !statusEl.dataset.sealWarned) {
+    statusEl.dataset.sealWarned = 'true';
+    statusEl.className = 'error';
+    statusEl.textContent = 'Seal image not found. Keep HeroImage_CH.png in the same folder as this HTML file before generating documents.';
+  }
+}
+
+function cacheSealAsDataUrl(img) {
+  try {
+    if (!img || !img.naturalWidth || embeddedSealDataUrl) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    embeddedSealDataUrl = canvas.toDataURL('image/png');
+  } catch (err) {
+    // If canvas export is blocked, fall back to relative file reference.
+  }
+}
+
+function initializeSealAssets() {
+  const sealImgs = Array.from(document.querySelectorAll('[data-seal="true"]'));
+  sealImgs.forEach(img => {
+    img.src = SEAL_LOCAL;
+    if (img.complete && img.naturalWidth) {
+      cacheSealAsDataUrl(img);
+      img.style.display = '';
+    } else {
+      img.addEventListener('load', () => {
+        img.style.display = '';
+        cacheSealAsDataUrl(img);
+      }, { once: true });
+    }
+  });
+}
+
+// ============ BRIDGE INTEGRATION (Oka Vlhpisa Data Import) ============
+let bridgeDismissed = false;
+
+function checkBridgeData() {
+  if (bridgeDismissed) return;
+  try {
+    if (!window.CNOBridge) return;
+    const ovCheck = window.CNOBridge.checkPublisher('oka-vlhpisa');
+    if (!ovCheck.available) return;
+
+    const org = window.CNOBridge.readSection('org', {});
+    const facilities = window.CNOBridge.readSection('facilities', []);
+    const storage = window.CNOBridge.readSection('storage', []);
+    const health = window.CNOBridge.readSection('systemHealth', {});
+    const forecast = window.CNOBridge.readSection('forecast', {});
+
+    // Only show banner if there's something useful to import
+    if (!org.name && !facilities.length) return;
+
+    const banner = document.getElementById('bridgeBanner');
+    const grid = document.getElementById('bridgeDetailGrid');
+    if (!banner) return;
+
+    // Build subtitle with specifics
+    const parts = [];
+    if (org.name) parts.push(org.name);
+    if (org.pwsId) parts.push('PWSID ' + org.pwsId);
+    document.getElementById('bridgeBannerSubtitle').textContent =
+      parts.length ? parts.join(' \u00b7 ') + ' \u2014 Click Import to pre-fill provider info, facilities, and system health.' :
+      'Import provider info, facilities, and system health to pre-fill this plan.';
+
+    // Build detail grid
+    let detailHtml = '';
+    if (org.name) detailHtml += '<div class="bridge-detail-item"><strong>Provider</strong>' + esc(org.name) + '</div>';
+    if (facilities.length) detailHtml += '<div class="bridge-detail-item"><strong>Facilities</strong>' + facilities.length + ' entries</div>';
+    if (storage.length) detailHtml += '<div class="bridge-detail-item"><strong>Storage</strong>' + storage.length + ' entries</div>';
+    if (health.totalActiveAssets) detailHtml += '<div class="bridge-detail-item"><strong>Active Assets</strong>' + health.totalActiveAssets + '</div>';
+    if (health.highRiskCount) detailHtml += '<div class="bridge-detail-item"><strong>High Risk</strong>' + health.highRiskCount + '</div>';
+    if (health.overdueMaintenanceCount) detailHtml += '<div class="bridge-detail-item"><strong>Overdue Maint</strong>' + health.overdueMaintenanceCount + '</div>';
+    if (forecast.totalNeed) detailHtml += '<div class="bridge-detail-item"><strong>Forecast Need</strong>$' + formatNumber(forecast.totalNeed) + '</div>';
+    if (grid) grid.innerHTML = detailHtml;
+
+    banner.classList.add('show');
+
+    // Also listen for live updates from OV in another tab
+    window.CNOBridge.onBridgeUpdate(function() {
+      if (!bridgeDismissed) checkBridgeData();
+    });
+  } catch (e) {
+    // Bridge errors must never break the IRP
+  }
+}
+
+function importFromBridge() {
+  try {
+    if (!window.CNOBridge) return;
+    const org = window.CNOBridge.readSection('org', {});
+    const facilities = window.CNOBridge.readSection('facilities', []);
+    const storage = window.CNOBridge.readSection('storage', []);
+    const capacity = window.CNOBridge.readSection('capacity', {});
+    const health = window.CNOBridge.readSection('systemHealth', {});
+    const forecast = window.CNOBridge.readSection('forecast', {});
+
+    const imported = [];
+
+    // Step 1: Provider info
+    if (org.name && !v('providerName')) {
+      document.getElementById('providerName').value = org.name;
+      imported.push('Provider name');
+    }
+    if (org.pwsId && !v('waterRightNos')) {
+      document.getElementById('waterRightNos').value = org.pwsId;
+      imported.push('PWSID');
+    }
+    if (org.address && !v('providerAddress')) {
+      document.getElementById('providerAddress').value = org.address;
+      imported.push('Address');
+    }
+    if (org.phone && !v('providerPhone')) {
+      document.getElementById('providerPhone').value = org.phone;
+      imported.push('Phone');
+    }
+    if (org.county && !v('county')) {
+      document.getElementById('county').value = org.county;
+      imported.push('County');
+    }
+
+    // Contacts
+    const mgr = (org.contacts && org.contacts.manager) || {};
+    if (mgr.name && !v('completedBy')) { document.getElementById('completedBy').value = mgr.name; imported.push('System manager name'); }
+    if (mgr.title && !v('completedByTitle')) { document.getElementById('completedByTitle').value = mgr.title; imported.push('System manager title'); }
+    if (mgr.email && !v('completedByEmail')) { document.getElementById('completedByEmail').value = mgr.email; }
+    if (mgr.phone && !v('completedByPhone')) { document.getElementById('completedByPhone').value = mgr.phone; }
+
+    const chair = (org.contacts && org.contacts.boardChair) || {};
+    if (chair.name && !v('responsiblePerson')) { document.getElementById('responsiblePerson').value = chair.name; imported.push('Board chair name'); }
+    if (chair.title && !v('responsibleTitle')) { document.getElementById('responsibleTitle').value = chair.title; }
+    if (chair.email && !v('responsibleEmail')) { document.getElementById('responsibleEmail').value = chair.email; }
+    if (chair.phone && !v('responsiblePhone')) { document.getElementById('responsiblePhone').value = chair.phone; }
+
+    // Capacity
+    if (capacity.maxSystemGpm && !v('surfaceWaterGpm')) {
+      document.getElementById('surfaceWaterGpm').value = capacity.maxSystemGpm;
+      imported.push('Max system capacity');
+    }
+    if (capacity.maxBoosterGpm && !v('boosterCapGpm')) {
+      document.getElementById('boosterCapGpm').value = capacity.maxBoosterGpm;
+      imported.push('Booster capacity');
+    }
+
+    // Step 2: Facilities
+    if (facilities.length > 0) {
+      // Only import if the facility repeater is empty or has just the blank default row
+      const host = document.getElementById('facilityRepeater');
+      const existingRows = host ? host.querySelectorAll('.repeat-row') : [];
+      const hasExistingData = Array.from(existingRows).some(row => {
+        const nameInput = row.querySelector('.facility-name');
+        return nameInput && nameInput.value.trim();
+      });
+
+      if (!hasExistingData) {
+        // Clear the default empty row
+        if (host) host.innerHTML = '';
+        facilities.forEach(function(f) {
+          addFacilityRow(f.name || '', f.location || '');
+        });
+        syncFacilitiesField();
+        imported.push(facilities.length + ' facilities');
+      }
+    }
+
+    // Storage
+    if (storage.length > 0) {
+      const primary = storage[0];
+      const secondary = storage.length > 1 ? storage[1] : null;
+      if (primary && !v('elevatedStorage')) {
+        const label = (primary.name || 'Storage') + (primary.capacity ? ' (' + primary.capacity + ')' : '');
+        document.getElementById('elevatedStorage').value = label;
+        imported.push('Primary storage');
+      }
+      if (secondary && !v('ingroundClearwell')) {
+        const label = (secondary.name || 'Storage') + (secondary.capacity ? ' (' + secondary.capacity + ')' : '');
+        document.getElementById('ingroundClearwell').value = label;
+        imported.push('Secondary storage');
+      }
+    }
+
+    // Hide banner, show toast
+    document.getElementById('bridgeBanner').classList.remove('show');
+
+    const toast = document.getElementById('bridgeToast');
+    if (toast) {
+      if (imported.length > 0) {
+        toast.innerHTML = '\u2713 Imported from Oka Vlhpisa: ' + imported.join(', ') +
+          '. <strong>Review and adjust as needed.</strong>' +
+          (health.overdueMaintenanceCount > 0 ? ' <span style="color:#92400e;">Note: ' + health.overdueMaintenanceCount + ' asset(s) have overdue maintenance.</span>' : '') +
+          (health.highRiskCount > 0 ? ' <span style="color:#92400e;">' + health.highRiskCount + ' asset(s) scored high-risk.</span>' : '');
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 12000);
+      } else {
+        toast.textContent = 'No new fields to import (existing entries were preserved).';
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 6000);
+      }
+    }
+
+    // Trigger recalculations
+    updateSupplyDemandCalculator(true);
+
+    // Auto-save after import
+    try { saveProgress(); } catch(e) {}
+
+  } catch (e) {
+    // Bridge import errors must never break the IRP
+    const toast = document.getElementById('bridgeToast');
+    if (toast) {
+      toast.style.background = '#fee2e2';
+      toast.style.color = '#991b1b';
+      toast.style.borderColor = '#fca5a5';
+      toast.textContent = 'Import encountered an error. You can enter data manually.';
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 6000);
+    }
+  }
+}
+
+function dismissBridge() {
+  bridgeDismissed = true;
+  const banner = document.getElementById('bridgeBanner');
+  if (banner) banner.classList.remove('show');
+}
+
+// Auto-load on page open
+window.addEventListener('DOMContentLoaded', () => {
+  // Dynamically position progress bar below sticky header
+  const header = document.querySelector('.header');
+  const progressBar = document.getElementById('progressBar');
+  if (header && progressBar) {
+    const setProgressTop = () => { progressBar.style.top = header.offsetHeight + 'px'; };
+    setProgressTop();
+    window.addEventListener('resize', setProgressTop);
+  }
+  initializeSealAssets();
+  if (!document.getElementById('facilityRepeater')?.children.length) addFacilityRow();
+  syncFacilitiesField();
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('change', () => { try { saveProgress(); } catch(e) {} });
+    if (el.closest('#step2')) {
+      // Water use table inputs: reconcile only on blur (not every keystroke)
+      if (el.closest('.year-table')) {
+        el.addEventListener('blur', () => {
+          // Reset narrative flags so textareas auto-regenerate when source data changes
+          supplyDemandManual = false;
+          futureGrowthManual = false;
+          capacityMoratoriumManual = false;
+          updateSupplyDemandCalculator(true);
+        });
+      } else if (el.id === 'supplyDemandBalance' || el.id === 'futureGrowth' || el.id === 'capacityMoratoriumPlan') {
+        // These are the narrative fields -- don't reset flags here
+      } else {
+        el.addEventListener('input', () => updateSupplyDemandCalculator(false));
+        // When growth/threshold/capacity inputs change, reset flags so narratives auto-update
+        if (el.id.startsWith('growth_') || el.id.startsWith('capacity') || el.id === 'surfaceWaterGpm' || el.id === 'totalPermittedAmount' || el.id === 'futureGrowthNotes' || el.id === 'growthProjectionYears' || el.id === 'growthCustomPct') {
+          el.addEventListener('change', () => {
+            supplyDemandManual = false;
+            futureGrowthManual = false;
+            capacityMoratoriumManual = false;
+          });
+        }
+      }
+      el.addEventListener('change', () => updateSupplyDemandCalculator(false));
+    }
+  });
+  document.getElementById('supplyDemandBalance')?.addEventListener('input', () => { supplyDemandManual = true; });
+  document.getElementById('futureGrowth')?.addEventListener('input', () => { futureGrowthManual = true; });
+  document.getElementById('capacityMoratoriumPlan')?.addEventListener('input', () => { capacityMoratoriumManual = true; });
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    try {
+      const data = JSON.parse(raw);
+      if (data.savedAt) {
+        const d = new Date(data.savedAt);
+        document.getElementById('saveIndicator').textContent = 'Previous save: ' + d.toLocaleDateString();
+      }
+    } catch(e) {}
+  }
+  updateSupplyDemandCalculator(true);
+  // Check for Oka Vlhpisa data via bridge
+  setTimeout(function() { try { checkBridgeData(); } catch(e) {} }, 400);
+});
+
+// ============ HELPERS ============
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+function c(id) { return document.getElementById(id)?.checked || false; }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+let WP = '';
+
+function buildPreview() {
+  const name = v('providerName') || '(No name entered)';
+  const appCount = ['includeAppA','includeAppB','includeAppC','includeAppD','includeAppE','includeAppF','includeAppG','includeAppH'].filter(id => c(id)).length;
+  let healthHtml = '';
+  try {
+    if (window.CNOBridge) {
+      const ovCheck = window.CNOBridge.checkPublisher('oka-vlhpisa');
+      if (ovCheck.available) {
+        const health = window.CNOBridge.readSection('systemHealth', {});
+        const forecast = window.CNOBridge.readSection('forecast', {});
+        const parts = [];
+        if (health.totalActiveAssets) parts.push('<strong>Active Assets:</strong> ' + health.totalActiveAssets);
+        if (health.avgCondition) parts.push('<strong>Avg Condition:</strong> ' + health.avgCondition + '/5');
+        if (health.highRiskCount) parts.push('<strong style="color:#dc2626">High Risk:</strong> ' + health.highRiskCount);
+        if (health.overdueMaintenanceCount) parts.push('<strong style="color:#dc2626">Overdue Maint:</strong> ' + health.overdueMaintenanceCount);
+        if (health.pastUsefulLifeCount) parts.push('<strong>Past Life:</strong> ' + health.pastUsefulLifeCount);
+        if (forecast.totalGap) parts.push('<strong>Forecast Gap:</strong> $' + formatNumber(forecast.totalGap));
+        if (parts.length) {
+          healthHtml = '<br><div style="margin-top:8px;padding:8px 10px;background:rgba(118,185,0,0.1);border:1px solid rgba(118,185,0,0.2);border-radius:8px;font-size:0.84rem;">' +
+            '<strong style="color:var(--cno-green)">Oka Vlhpisa System Health (auto-linked)</strong><br>' +
+            parts.join(' &middot; ') +
+            '<br><span style="font-size:0.76rem;color:var(--text-light)">Snapshot: ' + new Date(health.snapshotDate || ovCheck.publishedAt).toLocaleString() + '</span>' +
+            '</div>';
+        }
+      }
+    }
+  } catch(e) {}
+  document.getElementById('previewSummary').innerHTML = `
+    <strong style="font-size:1rem;color:var(--cno-purple)">Document Summary</strong><br><br>
+    <strong>Provider:</strong> ${esc(name)}<br>
+    <strong>Population:</strong> ${esc(v('populationServed') || 'N/A')}<br>
+    <strong>Service Area:</strong> ${esc(v('serviceArea') || 'N/A')} sq mi<br>
+    <strong>PWSID:</strong> ${esc(v('waterRightNos') || 'N/A')}<br>
+    <strong>Wastewater System:</strong> ${c('hasWastewater')?'Yes':'No'}<br>
+    <strong>Appendices:</strong> ${appCount} of 8<br>
+    <strong>Water Allocation (Stage 7):</strong> ${c('includeAllocation')?'Yes':'No'}<br>
+    <strong>Logo:</strong> ${logoDataUrl?'Included':'None'}<br>
+    <strong>Saved Progress:</strong> ${localStorage.getItem(STORAGE_KEY)?'Yes':'No'}
+    ${healthHtml}
+  `;
+}
+
+function getNotificationMethods() {
+  const m = [];
+  if (c('notify_newspaper')) m.push('Publication in a newspaper of general circulation');
+  if (c('notify_directmail')) m.push('Direct mail to each customer on the utility bill, as a bill insert, and/or special mailing');
+  if (c('notify_psa')) m.push('Public service announcements');
+  if (c('notify_signs')) m.push('Signs posted in public places');
+  if (c('notify_flyers')) m.push('Take-home flyers at schools');
+  if (c('notify_meetings')) m.push('Public meetings/community council meetings');
+  if (c('notify_social')) m.push('Social media');
+  if (c('notify_website')) m.push(WP + ' website');
+  if (c('notify_masstext')) m.push('Mass text communication');
+  if (c('notify_radio')) m.push('Radio');
+  if (c('notify_localnews')) m.push('Local news outlets');
+  if (c('notify_email')) m.push('Email alerts and notifications');
+  return m;
+}
+
+function stageDemandText(stage) {
+  const mg = v('s'+stage+'_demand_mg'), days = v('s'+stage+'_demand_days');
+  if (mg) return 'total daily water demand equals or exceeds '+mg+' million gallons'+(days?' for '+days:'');
+  return '';
+}
+
+function buildTriggers(stageNum) {
+  const parts = [];
+  if (c('trig_demand')) { const dt = stageDemandText(stageNum); if (dt) parts.push(dt); else parts.push('total daily water demand equals or exceeds ____ million gallons'); }
+  if (c('trig_supply') && v('supplyThreshold')) parts.push(v('supplyThreshold'));
+  if (c('trig_tank') && v('tankDesc')) parts.push('tank level in the '+v('tankDesc')+' falls below '+v('tankPsi')+' for '+v('tankDuration'));
+  if (c('trig_seasonal')) parts.push('annually, May 1 through September 30 for drought events');
+  if (c('trig_reservoir') && v('reservoirPct')) parts.push('reservoir levels at approximately '+v('reservoirPct'));
+  return parts.length>0 ? parts.join(' / ') : '[specific trigger criteria]';
+}
+
+function buildSeasonalOutreachCampaigns(provider) {
+  return [
+    {
+      title: 'Freeze Preparedness Campaign',
+      period: `${v('freeze_from') || 'November'} through ${v('freeze_to') || 'February'}`,
+      focus: getSeasonFocusText('freeze', 'freeze_focus_manual'),
+      headline: `${provider} Freeze Preparedness Notice`,
+      concern: 'freeze conditions that can damage lines, meters, pumps, and customer plumbing',
+      action: 'protect exposed plumbing, know shut-off locations, and follow freeze guidance from the provider'
+    },
+    {
+      title: 'Flood / Storm Readiness Campaign',
+      period: `${v('flood_from') || 'March'} through ${v('flood_to') || 'June'}`,
+      focus: getSeasonFocusText('flood', 'flood_focus_manual'),
+      headline: `${provider} Flood and Storm Readiness Notice`,
+      concern: 'flooding, source-water quality impacts, and storm-related service disruption',
+      action: 'watch provider notices, protect drinking water, and follow boil-order or emergency supply instructions when issued'
+    },
+    {
+      title: 'Summer Demand Management Campaign',
+      period: `${v('summer_from') || 'May'} through ${v('summer_to') || 'September'}`,
+      focus: getSeasonFocusText('summer', 'summer_focus_manual'),
+      headline: `${provider} Summer Water Use Notice`,
+      concern: 'high seasonal demand, irrigation pressure, and peak-day system strain',
+      action: 'reduce outdoor watering, repair leaks, and avoid unnecessary peak-use activities when requested'
+    },
+    {
+      title: 'Drought Monitoring Campaign',
+      period: `${v('drought_from') || 'May'} through ${v('drought_to') || 'October'}`,
+      focus: getSeasonFocusText('drought', 'drought_focus_manual'),
+      headline: `${provider} Drought Monitoring Notice`,
+      concern: 'reduced supply, drought stress, and conservation-stage activation',
+      action: 'follow stage notices promptly and reduce non-essential water use as conditions tighten'
+    }
+  ].map(campaign => ({
+    ...campaign,
+    flyer: `<p><strong>${esc(campaign.headline)}</strong></p><p>${esc(provider)} is sharing seasonal outreach for the period of ${esc(campaign.period)}. Current focus areas include ${esc(campaign.focus)}.</p><p>This campaign is intended to help customers prepare for ${esc(campaign.concern)} and understand what actions may be requested.</p><p><strong>Customer action:</strong> ${esc(campaign.action)}.</p><p>Staff should edit this draft with dates, contacts, local instructions, and any current stage information before release.</p>`,
+    socialShort: `${provider}: ${campaign.title.replace(' Campaign','')} in effect for ${campaign.period}. Focus: ${campaign.focus}. Please follow local guidance and conserve when requested.`,
+    socialLong: `${provider} is sharing a ${campaign.title.replace(' Campaign','').toLowerCase()} update for ${campaign.period}. Focus areas include ${campaign.focus}. Customers should stay alert for local instructions, reduce avoidable water use when requested, and follow provider guidance tied to weather, system conditions, and response stages.`,
+    sms: `${provider}: ${campaign.title.replace(' Campaign','')} update for ${campaign.period}. Focus: ${campaign.focus}. Watch for local instructions and conserve when requested.`,
+    website: `<p>${esc(provider)} is issuing a seasonal outreach notice for ${esc(campaign.period)}.</p><ul><li><strong>Campaign:</strong> ${esc(campaign.title)}</li><li><strong>Focus areas:</strong> ${esc(campaign.focus)}</li><li><strong>Customer action:</strong> ${esc(campaign.action)}</li></ul><p>This website notice should be edited with current dates, local contact information, and any active stage or advisory before posting.</p>`
+  }));
+}
+function renderSeasonalOutreachCampaigns(campaigns) {
+  return campaigns.map(campaign => `<div class="box"><h2>${esc(campaign.title)}</h2><p><strong>Season window:</strong> ${esc(campaign.period)}</p><p><strong>Focus areas:</strong> ${esc(campaign.focus)}</p><h3>Editable Flyer Draft</h3>${campaign.flyer}<h3>Short Social Post</h3><blockquote>${esc(campaign.socialShort)}</blockquote><h3>Long Social / Facebook Post</h3><blockquote>${esc(campaign.socialLong)}</blockquote><h3>Mass Text / SMS Draft</h3><blockquote>${esc(campaign.sms)}</blockquote><h3>Website Notice Draft</h3>${campaign.website}</div>`).join('');
+}
+function buildOutreachKitContent() {
+  const provider = v('providerName') || '[WATER PROVIDER]';
+  WP = provider;
+  const stageSummary = [
+    ['Stage 2 Mild', stageDemandText(2)],
+    ['Stage 3 Moderate', stageDemandText(3)],
+    ['Stage 4 Severe', stageDemandText(4)],
+    ['Stage 5 Critical', stageDemandText(5)],
+    ['Stage 6 Emergency', stageDemandText(6)]
+  ].filter(([, txt]) => txt).map(([stage, txt]) => `${stage}: ${txt}`);
+  const restrictions = [];
+  if (c('limitPoolUse')) restrictions.push('limit pool filling and refilling');
+  if (c('limitVehicleWash')) restrictions.push('limit vehicle washing');
+  if (c('limitGolfCourse')) restrictions.push('limit golf course irrigation');
+  if (c('limitNewConnections')) restrictions.push('pause or restrict new connections during critical stages');
+  if (c('includeAllocation')) restrictions.push('implement Stage 7 household allocations when necessary');
+  const triggerLine = stageSummary.length ? stageSummary.join('; ') : 'Triggers should be completed by the provider before release.';
+  const restrictionLine = restrictions.length ? restrictions.join(', ') : 'Conservation measures should be tailored to the adopted response stage.';
+  const notes = v('futureGrowthNotes') || 'Add any local drought, freeze, flood, or capacity context here.';
+  return {
+    title: `Outreach Kit - ${provider}`,
+    flyer: `<p><strong>${esc(provider)} Water Service Update</strong></p><p>${esc(provider)} is monitoring system conditions and may implement one or more impact response stages to protect available supply, maintain pressure, and preserve service reliability.</p><p><strong>Current planning triggers:</strong> ${esc(triggerLine)}</p><p><strong>Potential customer actions:</strong> ${esc(restrictionLine)}.</p><p>Customers should watch official updates from ${esc(provider)} and be prepared to reduce non-essential water use immediately if a stage is activated. Staff should edit this draft with dates, contact information, and any adopted restrictions before release.</p><p><strong>Local planning context:</strong> ${esc(notes)}</p>`,
+    socialShort: `${provider} is monitoring water system conditions. Please be prepared to reduce non-essential water use if response stages are activated. Watch official updates for restrictions, dates, and service guidance.`,
+    socialLong: `${provider} is actively monitoring supply, demand, and system conditions under its Impact Response Plan. If response stages are activated, customers may be asked to limit non-essential uses such as pool filling, vehicle washing, irrigation, or other high-volume activities depending on conditions. Follow official updates for the latest stage information, effective dates, and customer instructions.`,
+    sms: `${provider}: Water system conditions are being monitored closely. Please be ready to reduce non-essential water use if response stages are activated. Watch for official updates.`,
+    website: `<p>${esc(provider)} is monitoring current water system conditions under its Impact Response Plan. Staff should update this notice with the current stage, effective date, and customer requirements before posting.</p><ul><li><strong>Trigger summary:</strong> ${esc(triggerLine)}</li><li><strong>Possible restrictions:</strong> ${esc(restrictionLine)}</li><li><strong>Customer action:</strong> Reduce non-essential water use and follow official provider guidance.</li></ul><p><strong>Planning notes:</strong> ${esc(notes)}</p>`,
+    seasonalCampaigns: buildSeasonalOutreachCampaigns(provider)
+  };
+}
+function buildOutreachKitDocument() {
+  const kit = buildOutreachKitContent();
+  return `<html><head><meta charset="utf-8"><title>${esc(kit.title)}</title><style>@page{size:8.5in 11in;margin:1in;}body{font-family:'Times New Roman',serif;font-size:12pt;line-height:1.5;color:#000;}h1{font-size:18pt;color:#1E3D3B;margin:0 0 12pt;}h2{font-size:14pt;color:#1E3D3B;margin:18pt 0 8pt;}h3{font-size:12pt;color:#1E3D3B;margin:14pt 0 6pt;}p{margin:0 0 10pt;}blockquote{border-left:4px solid #D4D96A;padding-left:12pt;margin:10pt 0;}ul{margin-left:24pt;} .box{border:1px solid #ccc;padding:12pt;margin:12pt 0;background:#faf8f5;}</style></head><body><h1>${esc(kit.title)}</h1><p>These drafts are generated from the current plan inputs and are intended for editing before distribution.</p><div class="box"><h2>General System Update Flyer Draft</h2>${kit.flyer}</div><h2>Short Social Post</h2><blockquote>${esc(kit.socialShort)}</blockquote><h2>Long Social / Facebook Post</h2><blockquote>${esc(kit.socialLong)}</blockquote><h2>Mass Text / SMS Draft</h2><blockquote>${esc(kit.sms)}</blockquote><div class="box"><h2>Website Notice Draft</h2>${kit.website}</div><h1>Seasonal Outreach Campaigns</h1><p>The following campaign drafts are based on the Seasonal Education Calendar choices and can be tailored for seasonal posts, flyers, website notices, and text alerts.</p>${renderSeasonalOutreachCampaigns(kit.seasonalCampaigns)}</body></html>`;
+}
+function generateOutreachKit(format) {
+  try {
+    const html = buildOutreachKitDocument();
+    const blob = new Blob([html], { type: format === 'html' ? 'text/html' : 'application/msword' });
+    downloadBlob(blob, safeName() + (format === 'html' ? '_Outreach_Kit.html' : '_Outreach_Kit.doc'));
+    showStatus('success', 'Outreach kit generated successfully. Check your downloads folder.');
+  } catch (err) {
+    showStatus('error', 'Could not generate outreach kit: ' + err.message);
+  }
+}
+
+// ============ DOCUMENT GENERATION ============
+function generateDocument(format) {
+  WP = v('providerName') || '[WATER PROVIDER]';
+  const statusEl = document.getElementById('status-msg');
+  try {
+    if (!embeddedSealDataUrl) {
+      const sealEl = document.querySelector('[data-seal="true"]');
+      if (sealEl && sealEl.complete && sealEl.naturalWidth) cacheSealAsDataUrl(sealEl);
+    }
+    const html = buildFullDocument();
+    if (format === 'html') {
+      const blob = new Blob([html], { type: 'text/html' });
+      downloadBlob(blob, safeName() + '_IRP.html');
+    } else {
+      const blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
+      downloadBlob(blob, safeName() + '_IRP.doc');
+    }
+    showStatus('success', 'Document generated successfully. Check your downloads folder.');
+  } catch(e) {
+    showStatus('error', 'Error: ' + e.message);
+    console.error(e);
+  }
+}
+
+function safeName() { return (WP.replace(/[^a-zA-Z0-9 ]/g,'').substring(0,40).trim()) || 'Impact_Response_Plan'; }
+function downloadBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function buildFullDocument() {
+  const nm = getNotificationMethods();
+  const nBullets = nm.map(m=>'<li>'+esc(m)+'</li>').join('\n');
+  const eduM = [c('edu_newsletter')?'newsletter':'',c('edu_social')?'social media':'',c('edu_website')?'website':''].filter(Boolean).join(', ') || '[methods]';
+  const ct = v('courtType')||'district court';
+  const ww = c('hasWastewater');
+  const wwText = ww ? ' Additionally, '+WP+' owns and operates a wastewater collection and treatment system. This system is permitted and regulated by Oklahoma Department of Environmental Quality (DEQ) to operate and maintain these systems.' : '';
+  const county = v('county')||'[COUNTY]';
+  const area = v('serviceArea')||'[_____]';
+  const mf = c('hasMultiFamily');
+  const custTypes = 'single-family residential, wholesale'+(mf?', multiple-family residential':'')+', commercial, institutional, and industrial';
+  const wholeProv = c('hasWholesale') ? v('wholesaleProviders')||'[Wholesale Provider(s)]' : '';
+  const reconnect = v('reconnectCharge')||'$150';
+  const minF = v('minFine')||'$50'; const maxF = v('maxFine')||'$1,000';
+  const falseF = v('falseReportFine')||'$75';
+  const leakHrs = v('leakRepairHours')||'72'; const wasteF = v('wasteFine')||'$500';
+  const relief = v('reliefType')||'punitive / injunctive';
+  const monFreq = v('monitoringFreq')||'daily';
+  const meetDays = v('meetingDays')||'[meeting days]'; const meetTime = v('meetingTime')||'[time]'; const meetingLocation = v('meetingLocation')||'[location]';
+  const publicInput = getPublicInputMethods().join('; ') || '[public notice of a public meeting]';
+  const ordinanceText = c('hasOrdinance') ? '<p>This Plan is adopted by '+WP+' pursuant to the direction of the Board of Members contained in Section '+(v('cityCodeSection')||'___')+', Ordinance No. '+(v('ordinanceNo')||'___')+'.</p>' : '';
+
+  // Bridge: build system health note if OV data is available
+  let healthNote = '';
+  try {
+    if (window.CNOBridge) {
+      const ovCheck = window.CNOBridge.checkPublisher('oka-vlhpisa');
+      if (ovCheck.available) {
+        const health = window.CNOBridge.readSection('systemHealth', {});
+        const forecast = window.CNOBridge.readSection('forecast', {});
+        if (health.totalActiveAssets) {
+          const rows = [];
+          rows.push('<tr><td style="font-weight:bold;">Active Infrastructure Assets</td><td>' + (health.totalActiveAssets || 'N/A') + '</td></tr>');
+          rows.push('<tr><td style="font-weight:bold;">Replacement Value</td><td>$' + formatNumber(health.replacementValue || 0) + '</td></tr>');
+          rows.push('<tr><td style="font-weight:bold;">Average Condition</td><td>' + (health.avgCondition || 'N/A') + ' / 5</td></tr>');
+          if (health.highRiskCount) rows.push('<tr><td style="font-weight:bold;">High-Risk Assets</td><td>' + health.highRiskCount + '</td></tr>');
+          if (health.overdueMaintenanceCount) rows.push('<tr><td style="font-weight:bold;">Overdue Maintenance Items</td><td>' + health.overdueMaintenanceCount + '</td></tr>');
+          if (health.pastUsefulLifeCount) rows.push('<tr><td style="font-weight:bold;">Assets Past Useful Life</td><td>' + health.pastUsefulLifeCount + '</td></tr>');
+          if (health.replaceWithin5Years) rows.push('<tr><td style="font-weight:bold;">Replace Within 5 Years</td><td>' + health.replaceWithin5Years + '</td></tr>');
+          if (health.criticalAssetCount) rows.push('<tr><td style="font-weight:bold;">AWIA Critical Assets</td><td>' + health.criticalAssetCount + '</td></tr>');
+          if (forecast.totalNeed) rows.push('<tr><td style="font-weight:bold;">' + (forecast.horizonYears || '') + '-Year Capital Forecast Need</td><td>$' + formatNumber(forecast.totalNeed) + '</td></tr>');
+          if (forecast.totalGap) rows.push('<tr><td style="font-weight:bold;">Projected Funding Gap</td><td>$' + formatNumber(forecast.totalGap) + '</td></tr>');
+          healthNote = '<h2>Infrastructure Health Snapshot</h2>' +
+            '<p><em>The following data was automatically linked from Oka Vlhpisa (Water System Asset Manager) as of ' +
+            new Date(health.snapshotDate || ovCheck.publishedAt).toLocaleDateString() +
+            '. It is provided for planning context and should be verified against current conditions before adoption.</em></p>' +
+            '<table style="width:60%;">' + rows.join('') + '</table>';
+        }
+      }
+    }
+  } catch(e) { /* Bridge errors must never break document generation */ }
+
+  // Calendar values
+  const fzStart=v('freezeStart')||'January', fzEnd=v('freezeEnd')||'March';
+  const flStart=v('floodStart')||'March', flEnd=v('floodEnd')||'May';
+  const emailMonth=v('emailAlertMonth')||'June';
+  const drStart=v('droughtStart')||'June', drEnd=v('droughtEnd')||'September';
+  const freezeFocusText = getSeasonFocusText('freeze','freezeFocus');
+  const floodFocusText = getSeasonFocusText('flood','floodFocus');
+  const summerFocusText = getSeasonFocusText('summer','summerFocus');
+  const droughtFocusText = getSeasonFocusText('drought','droughtFocus');
+
+  // Year table
+  let yearRows = '';
+  for(let i=1;i<=5;i++) yearRows+=`<tr><td>${esc(v('yr'+i+'_year'))}</td><td>${esc(v('yr'+i+'_produced'))}</td><td>${esc(v('yr'+i+'_metered'))}</td><td>${esc(v('yr'+i+'_nonmetered'))}</td></tr>`;
+
+  // Connection data
+  const connData = [['Residential',v('connResidential')],['Wholesale / Other Systems',v('connWholesale')],['Commercial',v('connCommercial')],['Institutional',v('connInstitutional')],['Industrial',v('connIndustrial')]].filter(r=>r[1]).map(r=>`<tr><td style="padding-left:24pt">${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+  const facilitiesList = getFacilitiesList();
+  const facilitiesHtml = facilitiesList.length ? `<ul>${facilitiesList.map(item => `<li><strong>${esc(item.name || 'Facility')}</strong>${item.location ? ' — ' + esc(item.location) : ''}</li>`).join('')}</ul>` : esc(v('facilities'));
+
+  // Allocation values
+  const a12=v('alloc_1_2')||'6,000', a34=v('alloc_3_4')||'7,000', a56=v('alloc_5_6')||'8,000';
+  const a78=v('alloc_7_8')||'9,000', a910=v('alloc_9_10')||'10,000', a11=v('alloc_11')||'12,000';
+  const s1=v('surcharge1')||'$50', s2=v('surcharge2')||'$100', s3=v('surcharge3')||'$250', s4=v('surcharge4')||'$500';
+
+  // Emergency contacts
+  const emCoord = v('emCoordinator'), fireC = v('fireChief'), cJudge = v('countyJudge'), deqC = v('deqContact');
+
+  // Logo
+  const logoHtml = logoDataUrl ? `<div style="text-align:center;margin-bottom:24pt;"><img src="${logoDataUrl}" style="max-height:80pt;max-width:300pt;" alt="Provider Logo"></div>` : '';
+
+  return `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset="utf-8">
+<style>
+@page{size:8.5in 11in;margin:1in;}
+body{font-family:'Times New Roman',serif;font-size:12pt;line-height:1.5;color:#000;}
+h1{font-size:16pt;font-weight:bold;text-align:center;margin-top:24pt;margin-bottom:12pt;page-break-before:always;}
+h1:first-of-type{page-break-before:auto;}
+h2{font-size:14pt;font-weight:bold;margin-top:18pt;margin-bottom:8pt;color:#1E3D3B;}
+h3{font-size:12pt;font-weight:bold;margin-top:12pt;margin-bottom:6pt;color:#1E3D3B;}
+p{margin-bottom:8pt;text-align:justify;}
+table{border-collapse:collapse;width:100%;margin:12pt 0;}
+th,td{border:1px solid #999;padding:4pt 8pt;font-size:11pt;}
+th{background-color:#D1E0D7;font-weight:bold;color:#1E3D3B;}
+.cover-badge{display:block;margin:0 auto 10pt;max-width:95pt;max-height:95pt;object-fit:contain;}
+.cover-note{background:#F5F3F1;border:1px solid #D9E1E2;padding:10pt 12pt;margin:18pt auto 0;max-width:78%;font-size:10pt;text-align:left;}
+.doc-footer-note{font-size:9pt;color:#666;text-align:center;}
+ul,ol{margin-left:24pt;margin-bottom:8pt;}
+li{margin-bottom:4pt;}
+.center{text-align:center;}
+.sig-line{border-bottom:1px solid #000;width:300pt;display:inline-block;margin-bottom:4pt;}
+.sig-block{margin-top:36pt;}
+</style></head><body>
+
+<!-- TITLE PAGE -->
+<div style="text-align:center;margin-top:120pt;">
+<img src="${resolveSealSrc()}" alt="Choctaw Nation seal" class="cover-badge" onerror="this.style.display='none'">
+${logoHtml}
+<h1 style="font-size:22pt;page-break-before:auto;color:#1E3D3B;">Impact Response Plan</h1>
+<h2 style="text-align:center;color:#76B900;">(Comprehensive)</h2><br><br>
+<div class="cover-note"><strong>Internal Use Notice.</strong> This software-generated document is intended to assist authorized planning and response activities for water systems and affiliated tribal operations. Review, approval, and issuance must occur through proper governance and operational channels before reliance as an official plan.</div>
+<div class="cover-note" style="margin-top:10pt;border-left:4px solid #D4D96A;"><strong>Enforceability Notice.</strong> This document is a draft planning instrument and is not enforceable until formally reviewed, adopted, and approved by the governing Board or Council. Do not distribute or rely upon this document as an active plan until Board/Council approval has been obtained and documented.</div>
+<p style="text-align:center;font-size:14pt;font-weight:bold;">${esc(WP)}</p><br>
+<table style="width:60%;margin:24pt auto;border:none;">
+<tr><td style="border:none;font-weight:bold;width:40%">Address:</td><td style="border:none;">${esc(v('providerAddress'))}</td></tr>
+<tr><td style="border:none;font-weight:bold;">Telephone:</td><td style="border:none;">${esc(v('providerPhone'))}</td></tr>
+<tr><td style="border:none;font-weight:bold;">PWSID Number:</td><td style="border:none;">${esc(v('waterRightNos'))}</td></tr>
+</table>
+</div>
+
+<!-- SYSTEM DATA PAGE -->
+<h1>Water System Data</h1>
+<h2>Production</h2>
+<table style="width:60%;"><tr><td style="font-weight:bold;">Maximum System Capacity (gpm)</td><td>${esc(v('surfaceWaterGpm'))}</td></tr><tr><td style="font-weight:bold;">Maximum Booster Pump Capacity (gpm)</td><td>${esc(v('boosterCapGpm'))}</td></tr></table>
+<h2>Storage</h2>
+<table style="width:60%;"><tr><td style="font-weight:bold;">Primary Storage Capacity</td><td>${esc(v('elevatedStorage'))}</td></tr><tr><td style="font-weight:bold;">Secondary Storage Capacity</td><td>${esc(v('ingroundClearwell'))}</td></tr></table>
+<h2>Customer Data</h2>
+<table style="width:60%;"><tr><td style="font-weight:bold;">Population Served</td><td>${esc(v('populationServed'))}</td></tr><tr><td style="font-weight:bold;">Facilities / Pump Stations</td><td>${facilitiesHtml}</td></tr><tr><td style="font-weight:bold;">Fire Hydrants</td><td>${esc(v('fireHydrants'))}</td></tr>${connData}</table>
+<p><strong>Supplemental Supply Sources:</strong> ${esc(v('supplementalSources'))||'[To be determined]'}</p>
+<p><strong>Potential Interconnections:</strong> ${esc(v('interconnections'))||'[To be determined]'}</p>
+<h2>Water Use (5 Years)</h2>
+<table><tr><th>Year</th><th>Water Produced (Gal)</th><th>Water Metered (Gal)</th><th>Non-Metered Water (Gal)</th></tr>${yearRows}</table>
+<p><strong>Total Permitted Amount (if applicable):</strong> ${esc(v('totalPermittedAmount'))||'[Not entered]'}</p>
+<h2>Projected Water Demands</h2>
+<p>${esc(v('futureGrowth'))||'[Future growth projection to be completed.]'}</p>
+<h3>Supply and Demand Balance</h3>
+<p>${esc(v('supplyDemandBalance'))||'[To be completed.]'}</p>
+<h3>Plant Capacity / Meter Growth Moratorium</h3>
+<p>${esc(v('capacityMoratoriumPlan'))||'[To be completed.]'}</p>
+${healthNote}
+${ww?'<h2>Wastewater Utility System</h2><p>'+esc(v('wastewaterDesc')||'[To be completed.]')+'</p>':''}
+${c('hasReclaimedWater')?'<h2>Reclaimed Water Potential</h2><p>Potential for wastewater savings in outdoor watering to support water sustainability goals exists through reuse of water from wastewater plants (reclaimed water). An effort should be made toward greater public acceptance of the use of reclaimed water. Public attention should be drawn to the successful local reuse of water in areas like golf courses, commercial car washes, and parks. Education with school-age children to be comfortable with the use of reclaimed water as part of the water cycle should be explored.</p>':''}
+
+<div class="sig-block">
+<table style="border:none;width:100%;">
+<tr><td style="border:none;">System Manager: <span class="sig-line">${esc(v('completedBy'))}</span></td></tr>
+<tr><td style="border:none;">System Manager Title: <span class="sig-line">${esc(v('completedByTitle'))}</span></td></tr>
+<tr><td style="border:none;">System Manager Contact: <span class="sig-line" style="width:180pt">${esc(v('completedByPhone'))}</span> &nbsp; Email: <span class="sig-line" style="width:180pt">${esc(v('completedByEmail'))}</span></td></tr>
+<tr><td style="border:none;">Mayor / Board Chairperson: <span class="sig-line">${esc(v('responsiblePerson'))}</span></td></tr>
+<tr><td style="border:none;">Mayor / Board Chair Contact: <span class="sig-line" style="width:180pt">${esc(v('responsiblePhone'))}</span> &nbsp; Email: <span class="sig-line" style="width:180pt">${esc(v('responsibleEmail'))}</span></td></tr>
+<tr><td style="border:none;"><br>Signature: <span class="sig-line"></span> &nbsp; Date: <span class="sig-line" style="width:150pt"></span></td></tr>
+</table></div>
+
+<!-- PLAN BODY -->
+<h1>Impact Response Plan</h1>
+<p><strong>Choctaw Nation Environmental Protection Service &middot; Office of Water Resource Management.</strong></p>
+<p>This planning instrument supports continuity, response readiness, and water system resilience while respecting the governmental authority and protected interests of the Choctaw Nation of Oklahoma.</p>
+<p>${WP} has a high level of concern for the protection of the environment, sustainability of its water resources, and maintaining high levels of service to their customers.</p>
+<p>Climate change presents specific challenges to water providers, including increased frequency and duration of droughts, deep freeze events, and flooding from extreme precipitation events, and degradation of source water quality. ${WP} establishes this Impact Response Plan to predictively and preventatively plan for these challenges to maintain a high level of service to all customers on the system.</p>
+<p>${WP} is exercising diligence in this effort with the issuance of this Impact Response Plan (the Plan). This Plan is created to develop, manage, and conserve water resources, and further preparing for and responding to extreme climate and emergency impacts. This planning effort will ensure sufficient water will be available at a reasonable cost to protect public health, safety, and welfare; to further economic development; and to maintain the agricultural and natural resources of the region during water stressed events.</p>
+<p>${WP} owns and operates a water treatment and distribution system, including production, storage, and distribution facilities and equipment.${wwText}</p>
+<p>The system serves an area of approximately ${esc(area)} square miles. All properties within the ${WP} limits/boundaries use the water${ww?' and wastewater':''} system(s). The customer base consists of ${custTypes} users.</p>
+
+<h1>Section I: Declaration of Policy, Purpose, and Intent</h1>
+<p>In order to conserve, sustain, and maintain the available water supply and protect the integrity of water supply facilities, with particular regard to domestic water use, sanitation, and fire protection, to protect and preserve the public health, and minimize adverse impacts of water stresses, ${WP} hereby adopts the following Plan to address water shortages brought about by extreme climate impact and other emergency impact events.</p>
+<p>Water uses regulated or restricted under this Plan are considered to be non-essential and a continuation of such uses during times of water shortage or other emergency water supply impact conditions are deemed to constitute a waste of water which subjects the violators to penalties as defined in Section X of this Plan. "Waste" shall be defined as use of water in such an inefficient manner that excessive losses occur. (785:20-1-2; 82 O.S. &sect; 1020.15)</p>
+${ordinanceText}
+
+<h1>Section II: Public Involvement</h1>
+<p>Opportunity for the public to provide input into the preparation and adoption of the Plan was provided by ${WP} by means of ${esc(publicInput)}.</p>
+<p>${WP} holds regular Council Meetings on the ${esc(meetDays)} of each month at ${esc(meetTime)} at ${esc(meetingLocation)}. These meetings are open to the public.</p>
+
+<h1>Section III: Public Education</h1>
+<p>${WP} will timely provide the public with information about the Plan, including information about conditions under which each stage is initiated or terminated and the response measures to be implemented. This information will be provided by means of ${nm.slice(0,3).join(', ')||'[methods]'}.</p>
+<p>${WP} will distribute educational materials on water use and conservation through ${esc(eduM)} and provide the Impact Response Plan and conservation tips on the ${WP}'s website and social media.</p>
+<p>Beginning in the month of ${fzStart} through ${fzEnd}, ${WP} will increase educational efforts to increase customer awareness of potential freezing impacts to the water system and within customer lines. Updates will be made to notify customers of impending low temperatures as soon as possible through mass text communication, social media, website, radio, and local news outlets.</p>
+<p>Beginning in the month of ${flStart} through ${flEnd}, ${WP} will increase educational efforts regarding potential flooding conditions and necessary water conservation to encourage the most efficient use of water.</p>
+<p>In ${emailMonth}, ${WP} will increase educational efforts to inform customers on the ${WP} website providing email alerts and notifications on customers' water usage.</p>
+<p>Beginning in the month of ${drStart} through ${drEnd}, ${WP} will provide increased notification to customers with high or unusual usage trends to assist in early detection of leaks and irrigation issues. Updates to drought forecasts will be made via mass text communication, social media, website, radio, and local news outlets.</p>
+<p>${WP} will implement a process of maintaining and/or reducing high water consumption through good stewardship and conservation by performing frequent water accounting and meter testing to identify failures, breaks, leaks, and inaccuracies.</p>
+
+${c('hasWholesale')?`<h1>Section IV: Coordination with Interconnected Water Providers</h1><p>The service area of ${WP} distributes water to ${esc(wholeProv)} through purchase agreement and ${WP} has provided a copy of this Plan to ${esc(wholeProv)}. Further, ${WP} encourages ${esc(wholeProv)} to adopt this Plan for water stressed events.</p>`:''}
+
+<h1>Section V: Authorization</h1>
+<p>The ${WP} Board, or their designee is hereby authorized and directed to implement the applicable provisions of this Plan upon determination that such implementation is necessary to protect public health, safety, and welfare.</p>
+<p>${WP} is an Oklahoma public trust rural water system for the benefit of ${esc(county)} County and has the authority to enforce this Plan with appropriate fees for violations.</p>
+<p>Any violation of the provisions herein may result in penalty fee(s) and/or interruption of water service based upon repeated violations. Penalties shall be paid before water service is restored.</p>
+
+<h1>Section VI: Application</h1>
+<p>The provisions of this Plan shall apply to all persons, customers, and properties utilizing water provided by the ${WP}. The terms "person" and "customer" include individuals, corporations, partnerships, associations, wholesale entities, and all other legal entities.</p>
+
+<h1>Section VII: Definitions</h1>
+<p><strong>Aesthetic water use:</strong> water use for ornamental or decorative purposes such as fountains, reflecting pools, and water gardens.</p>
+<p><strong>Aquatic life:</strong> a vertebrate organism dependent upon an aquatic environment to sustain its life.</p>
+<p><strong>Best Management Practices (BMPs):</strong> applicable Best Management Practices for a particular industry or general use of water.</p>
+<p><strong>Commercial and institutional water use:</strong> water use integral to commercial and non-profit establishments and governmental entities.</p>
+<p><strong>Conservation:</strong> practices, techniques, and technologies that reduce consumption, reduce loss or waste, improve efficiency, or increase recycling and reuse of water.</p>
+<p><strong>Customer:</strong> Any person, company, corporation, partnership, association, organization, or other legal entity using water supplied by ${WP}.</p>
+<p><strong>Domestic water use:</strong> water use for personal needs or household/sanitary purposes such as drinking, bathing, heating, cooking, sanitation, or cleaning.</p>
+<p><strong>Drip irrigation:</strong> an irrigation system that applies water at controlled low-flow levels directly to plant roots.</p>
+<p><strong>Even number address:</strong> street addresses ending in 0, 2, 4, 6, 8, and locations without addresses.</p>
+<p><strong>Handheld hose:</strong> a hose physically held by one person, fitted with a shutoff nozzle.</p>
+<p><strong>Hand watering:</strong> application of water through a hand-held hose, watering can, or bucket.</p>
+<p><strong>Hose-end sprinkler:</strong> a device through which water flows from a hose to a sprinkler.</p>
+<p><strong>Industrial water use:</strong> use of water in processes designed to convert materials of lower value into forms having greater usability and value.</p>
+<p><strong>Irrigation system:</strong> a system of fixed pipes and water emitters that apply water to landscape plants or turfgrass.</p>
+<p><strong>Landscape irrigation use:</strong> water used for irrigation and maintenance of landscaped areas.</p>
+<p><strong>Municipal water use:</strong> water treated by ${WP} to meet Safe Drinking Water Standards.</p>
+<p><strong>Non-essential water use:</strong> water uses not essential for protection of public health, safety, and welfare.</p>
+<p><strong>Non-Metered/Unaccounted Water:</strong> water attributed to firefighting, unauthorized use, inaccurate metering, leaks, flushing, and main breaks.</p>
+<p><strong>Odd numbered address:</strong> street addresses ending in 1, 3, 5, 7, or 9.</p>
+<p><strong>Reclaimed/Reuse water:</strong> Wastewater treated to levels appropriate for irrigation and industrial uses.</p>
+<p><strong>Soaker hose:</strong> a flexible hose designed to slowly emit water across its entire length.</p>
+<p><strong>Swimming pool:</strong> any structure containing an artificial body of water having a depth of two (2) feet or more.</p>
+<p><strong>Waste:</strong> use of water in such an inefficient manner that excessive losses occur. (785:20-1-2; 82 O.S. &sect; 1020.15)</p>
+
+<h1>Section VIII: Initiation and Termination of Weather Response Stages</h1>
+<h2>Year-Round Water Conservation</h2>
+<p>Customers are encouraged to voluntarily adopt year-round water conservation practices and utilize best management practices, regardless of the season or water supply conditions.</p>
+<p>The ${WP} Board or their designee shall monitor water facility conditions, water supply and demand conditions, and other factors on a ${monFreq} basis and shall determine when impact conditions warrant initiation or termination of each stage.</p>
+
+<h3>Notification</h3>
+<p>The ${WP} Board shall notify the public of applicable Plan Stages by one or more of the following means:</p>
+<ul>${nBullets}</ul>
+
+<h3>Additional Notifications</h3>
+<p>The ${WP} Board shall notify the following:</p>
+<ul>
+<li>Mayor/Chairman and members of the City Council/Utility Board</li>
+<li>Fire Chief${fireC?' ('+esc(fireC)+')':''}</li>
+<li>County Emergency Management Coordinator${emCoord?' ('+esc(emCoord)+')':''}</li>
+<li>County Judge and Commissioner${cJudge?' ('+esc(cJudge)+')':''}</li>
+<li>State Disaster District / Department of Public Safety</li>
+<li>Oklahoma Department of Environmental Quality${deqC?' ('+esc(deqC)+')':''}</li>
+<li>Major water users</li>
+<li>Critical water users (hospitals, clinics, nursing homes, schools)</li>
+<li>Parks / street superintendents and public facilities managers</li>
+</ul>
+
+<!-- STAGE 1 -->
+<h2>Stage 1: ADVISORY of Potential Water Shortage Conditions</h2>
+<p><strong>Target:</strong> Voluntary 3% reduction in total water use.</p>
+<ol>
+<li>Lawns and landscaping may be watered on any day by handheld hose, drip irrigation, or watering can. During drought events, even-numbered addresses water Sundays/Thursdays; odd-numbered addresses water Saturdays/Wednesdays. Non-residential locations water Tuesdays/Fridays.</li>
+<li>Establishment of new turf is discouraged during drought events.</li>
+<li>All customers are encouraged to use native and drought-tolerant plants.</li>
+${c('limitPoolUse')?'<li>Customers are encouraged to reduce pool filling/refilling during impact events except to maintain structural integrity.</li>':''}
+</ol>
+
+<!-- STAGE 2 -->
+<h2>Stage 2: MILD Water Shortage Conditions - Voluntary Restrictions</h2>
+<p><strong>Initiation:</strong> ${buildTriggers(2)}</p>
+<p><strong>Termination:</strong> Conditions ceased for 5 consecutive days.</p>
+<p><strong>Target:</strong> Voluntary 5% reduction.</p>
+<ol>
+<li>Even addresses: Sundays/Thursdays, midnight to 10 a.m. and 8 p.m. to midnight. Odd addresses: Saturdays/Wednesdays, same hours.</li>
+<li>Non-residential: Tuesdays/Fridays.</li>
+<li>Customers requested to minimize non-essential water use.</li>
+<li>New turf highly discouraged; 30-day grace period if installed.</li>
+</ol>
+
+<!-- STAGE 3 -->
+<h2>Stage 3: MODERATE Water Shortage - Mandatory Restrictions</h2>
+<p><strong>Initiation:</strong> ${buildTriggers(3)}</p>
+<p><strong>Termination:</strong> Conditions ceased for 8 consecutive days.</p>
+<p><strong>Target:</strong> Mandatory 5%-10% reduction.</p>
+<p>All Stage 2 requirements remain in effect except:</p>
+<ol>
+<li>Irrigation limited to designated days, midnight-10 a.m. and 8 p.m.-midnight. Hand-held hose, bucket (5 gal or less), or drip irrigation permitted any time.</li>
+<li>Non-residential: Tuesdays/Fridays only.</li>
+${c('limitVehicleWash')?'<li>Vehicle washing prohibited except on designated days with bucket or shutoff-nozzle hose. Commercial car washes exempt.</li>':''}
+${c('limitPoolUse')?'<li>Pool filling prohibited except on designated days to maintain structural integrity.</li>':''}
+<li>Ornamental fountains prohibited except to support aquatic life or with recirculation.</li>
+<li>Hydrant use limited to firefighting and public safety, except under special permit.</li>
+${c('limitGolfCourse')?'<li>Golf course irrigation prohibited except designated days, midnight-10 a.m. and 8 p.m.-midnight. Non-provider water sources exempt.</li>':''}
+</ol>
+
+<!-- STAGE 4 -->
+<h2>Stage 4: SEVERE Water Shortage Conditions</h2>
+<p><strong>Initiation:</strong> ${buildTriggers(4)}</p>
+<p><strong>Termination:</strong> Conditions ceased for 10 consecutive days.</p>
+<p><strong>Target:</strong> Mandatory 10%-15% reduction.</p>
+<p>All prior stage requirements remain. Additionally:</p>
+<ol>
+<li>Irrigation limited to midnight-8 a.m. and 8 p.m.-midnight. Hose-end sprinklers absolutely prohibited.</li>
+${c('limitGolfCourse')?'<li>Golf course tee watering prohibited unless using non-provider water.</li>':''}
+<li>Fire hydrant special permits for construction prohibited.</li>
+</ol>
+
+<!-- STAGE 5 -->
+<h2>Stage 5: CRITICAL Water Shortage - Outdoor Watering Prohibited</h2>
+<p><strong>Initiation:</strong> ${buildTriggers(5)}. Freeze imminent within 2-3 weeks; temperatures expected below 30 degrees for 3+ days.</p>
+<p><strong>Termination:</strong> Conditions ceased for 15 consecutive days.</p>
+<p><strong>Target:</strong> Mandatory 15%-25% reduction.</p>
+<ol>
+<li>Irrigation limited to 3 a.m.-8 a.m. and 8 p.m.-midnight by hand-held hose, bucket, or drip only. Sprinklers and automatic systems absolutely prohibited.</li>
+${c('limitVehicleWash')?'<li>Non-commercial vehicle washing absolutely prohibited.</li><li>Commercial car washes: 6 a.m.-10 a.m. and 6 p.m.-10 p.m. only. Prohibited during flooding/freezing.</li>':''}
+${c('limitPoolUse')?'<li>Pool filling absolutely prohibited.</li>':''}
+<li>New landscaping absolutely prohibited.</li>
+<li>Ornamental fountains prohibited except for aquatic life or recirculation.</li>
+${c('limitNewConnections')?'<li>No new water service connections, meters, service lines, or pipeline extensions shall be approved.</li>':''}
+</ol>
+
+<!-- STAGE 6 -->
+<h2>Stage 6: EMERGENCY Water Shortage Impact Conditions</h2>
+<p><strong>Initiation:</strong> Major line breaks or system failures; water supply contamination; ${buildTriggers(6)}; freeze imminent within 1 week, temperatures below 20 degrees for 3+ days.</p>
+<p><strong>Termination:</strong> Conditions ceased for 15 consecutive days.</p>
+<p><strong>Target:</strong> Mandatory 30%-50% reduction.</p>
+<ol>
+<li>Irrigation of landscaped areas absolutely prohibited.</li>
+<li>Vehicle washing absolutely prohibited.</li>
+</ol>
+
+${c('includeAllocation')?`
+<h2>Stage 7: WATER ALLOCATION</h2><p>Stage 7 is the most restrictive allocation stage and establishes household limits, surcharge treatment for overages, and tighter administrative controls during severe shortage or emergency conditions.</p>
+<p><strong>Initiation:</strong> ${buildTriggers(6)}. Temperatures below 20 degrees for 1 week; expected to remain below freezing 3+ days.</p>
+<p><strong>Termination:</strong> 20 consecutive days during drought; 5 consecutive days during freezing events.</p>
+<h3>Priority</h3>
+<table><tr><th>Priority</th><th>Category</th></tr><tr><td>1</td><td>Hospitals/clinics/nursing homes</td></tr><tr><td>2</td><td>Residential</td></tr><tr><td>3</td><td>Schools</td></tr><tr><td>4</td><td>Fire Protection</td></tr><tr><td>5</td><td>Industrial</td></tr><tr><td>6</td><td>Commercial</td></tr><tr><td>7</td><td>Recreation/Aesthetics</td></tr></table>
+<h3>Single-Family Residential Allocation</h3>
+<table><tr><th>Persons per Household</th><th>Gallons per Month</th></tr><tr><td>1 or 2</td><td>${esc(a12)}</td></tr><tr><td>3 or 4</td><td>${esc(a34)}</td></tr><tr><td>5 or 6</td><td>${esc(a56)}</td></tr><tr><td>7 or 8</td><td>${esc(a78)}</td></tr><tr><td>9 or 10</td><td>${esc(a910)}</td></tr><tr><td>11 or more</td><td>${esc(a11)}</td></tr></table>
+<p>False reporting of household size: fine of not less than ${esc(falseF)}.</p>
+<h3>Residential Surcharges</h3>
+<table><tr><th>Overage</th><th>Surcharge</th></tr><tr><td>1st 1,000 gal over</td><td>${esc(s1)}</td></tr><tr><td>2nd 1,000 gal over</td><td>${esc(s2)}</td></tr><tr><td>3rd 1,000 gal over</td><td>${esc(s3)}</td></tr><tr><td>Each additional 1,000</td><td>${esc(s4)}</td></tr></table>
+<p>Surcharges are cumulative. Flow restrictor or service interruption may be applied.</p>
+${mf?`<h3>Master-Metered Multi-Family</h3><p>Allocated 6,000 gallons per month per dwelling unit.</p>`:''}
+<h3>Non-Residential Surcharges</h3>
+<table><tr><th>Overage</th><th>Surcharge</th></tr><tr><td>Up to 5% above allocation</td><td>1.5x normal rate per 1,000 gal</td></tr><tr><td>5%-10% above</td><td>2.0x normal rate</td></tr><tr><td>10%-15% above</td><td>2.5x normal rate</td></tr><tr><td>Over 15% above</td><td>3.0x normal rate</td></tr></table>
+`:''}
+
+<h1>Section IX: Enforcement</h1>
+<ol>
+<li>No person shall knowingly allow water use contrary to this Plan.</li>
+<li>Four or more violations: ${WP} Board authorized to discontinue service. Reconnection: ${esc(reconnect)} plus costs.</li>
+<li>Five or more violations: cumulative fees and corrective measures. Court fines: ${esc(minF)} to ${esc(maxF)} per offense. Each day constitutes a separate offense.</li>
+<li>Person in apparent control of property presumed to be the violator.</li>
+<li>Any ${WP} employee may issue violation notices.</li>
+</ol>
+
+<h1>Section X: Negligent Waste of Water</h1>
+<p>"Waste" per OWRB and Oklahoma law: use of water in such an inefficient manner that excessive losses occur. (785:20-1-2; 82 O.S. &sect; 1020.15)</p>
+<p>Failure to repair a leak causing water to flow through public right-of-way within ${esc(leakHrs)} hours of notice constitutes a violation. Fine up to ${esc(wasteF)} per day. Service may be terminated immediately for hazardous leaks.</p>
+
+${c('includeVariances')?`<h1>Section XI: Variances</h1><p>The ${WP} Board may grant temporary written variances if compliance cannot be technically accomplished or alternative methods achieve equivalent reduction. Petitions must be filed within 5 days of stage invocation.</p>`:''}
+
+${c('includeSeverability')?`<h1>Section XII: Severability</h1><p>The sections, paragraphs, sentences, clauses, and phrases of this Plan are severable. If any portion is declared unconstitutional, such unconstitutionality shall not affect the remaining provisions.</p>`:''}
+
+${c('includeAppA')?`<h1>Appendix A: Water Conservation Tips</h1><h2>Bathroom</h2><ol type="a"><li>Take a shower instead of a bath. Shower: 10-25 gallons; bath: 70 gallons.</li><li>Install low-flow shower heads (3 GPM max at 60 psi).</li><li>Install cutoff valve or turn water off while soaping.</li><li>Use cold water when hot is unnecessary.</li><li>Reduce bathtub water by 1-2 inches.</li><li>Turn off water while brushing teeth.</li><li>Wet hands, soap, then rinse.</li><li>Fill basin for shaving instead of running faucet.</li><li>Test toilets for leaks with food coloring.</li><li>Use toilet tank displacement device.</li><li>Install faucet aerators.</li><li>Never flush tissues or trash.</li><li>Install 1.6 GPF or less toilets when remodeling.</li></ol><h2>Kitchen</h2><ol type="a"><li>Use a pan or stopper for rinsing while cooking.</li><li>Run dishwasher only with full loads.</li><li>Use disposal sparingly.</li><li>Keep drinking water in refrigerator.</li><li>Clean vegetables in a pan, not running water.</li><li>Cook with minimal water and a lid.</li><li>Rinse dishes in a pan when hand washing.</li><li>Conserve in all kitchen uses.</li></ol><h2>Laundry</h2><ol type="a"><li>Wash only full loads.</li><li>Use lowest water level for light loads.</li><li>Use cold water when possible.</li></ol><h2>Appliances and Plumbing</h2><ol type="a"><li>Compare water requirements when purchasing appliances.</li><li>Check for leaks (slow drip wastes 170 gallons/day).</li><li>Learn to replace washers for prompt repair.</li><li>Check for leaks between meter and house.</li><li>Insulate hot water pipes.</li><li>Set water heater thermostat appropriately.</li><li>Use moisture meter for house plants.</li><li>Install rain and freeze sensors on irrigation.</li></ol><h2>Outdoor Use</h2><ol type="a"><li>Water lawns 5-9 a.m. during summer.</li><li>Use large-drop sprinklers, not fine mist.</li><li>Turn soaker hoses holes-down.</li><li>Water slowly; avoid high winds.</li><li>Keep sprinklers off streets and driveways.</li><li>Condition soil with compost.</li><li>Fertilize twice yearly for root growth.</li><li>Learn grass watering cues.</li><li>Avoid overwatering.</li><li>1.5 inches per week keeps most grass healthy.</li><li>Run automatic sprinklers 5-9 a.m.</li><li>Keep grass taller in hot weather.</li><li>Hand water small hot spots.</li><li>Plant appropriate species for your area.</li><li>Use rocks, gravel, or mulch where possible.</li><li>Sweep walks instead of hosing.</li><li>Wash cars with bucket; hose only to rinse.</li></ol>`:''}
+
+${c('includeAppB')?`<h1>Appendix B: Flood Preparation and Safety</h1><h2>Before</h2><ol><li>Determine if your home is in a flash flood area.</li><li>Inform emergency management of special needs individuals.</li><li>Know warnings, evacuation routes, and shelter locations.</li><li>Prepare emergency food supply (long shelf life, no cooking required, meet dietary needs).</li><li>Prepare emergency water supply (1 gallon/person/day, minimum 3-day supply).</li></ol><h2>During</h2><ol><li>Gather emergency supplies.</li><li>Monitor local media.</li><li>Secure outdoor items.</li><li>Turn off power if evacuating.</li></ol><h2>After</h2><ol><li>Do not drink flood water.</li><li>Follow boil water advisories.</li><li>Discard contaminated food/water.</li><li>Stay out of flood water (hazards include power lines, waste, debris, animals).</li><li>Keep children out of flood water.</li><li>Exposure risks: wound infections, skin rash, GI illness, tetanus.</li></ol>`:''}
+
+${c('includeAppC')?`<h1>Appendix C: Freeze Preparation and Safety</h1><h2>Before</h2><ol><li>Insulate exposed water lines.</li><li>Insulate walls/attic; weatherstrip doors/windows.</li><li>Close crawl spaces; eliminate drafts.</li><li>Repair leaks; know shut-off valve location.</li><li>Remove overhanging branches.</li><li>Remove garden hoses; insulate outdoor faucets.</li><li>Cover foundation vents.</li><li>Extra precautions for previously frozen pipes.</li><li>Prepare emergency food supply.</li><li>Prepare emergency water supply.</li></ol><h2>During</h2><ol><li>Monitor weather forecasts.</li><li>Bring pets indoors.</li><li>Drip faucets (10 drips/minute in sustained freezing).</li><li>Open cabinets to reach pipes.</li><li>Melt snow as backup (boil 1 minute).</li></ol><h2>After</h2><ol><li>Frozen pipes: shut off water, thaw slowly, check for cracks.</li><li>Burst pipes: shut off at valve, call professional.</li></ol>`:''}
+
+${c('includeAppD')?`<h1>Appendix D: Flood Resilience for Facilities</h1><ol><li>Evaluate floodplain components (100-year and 500-year).</li><li>Maintain 1-week treatment additive supply.</li><li>Test surge protection devices.</li><li>Identify vulnerable creek crossings.</li><li>Weather radios on hand.</li><li>Inquire about portable generator.</li><li>Install SCADA cabinet UPS backups.</li><li>Check sump pumps.</li><li>Monitor lake water quality changes.</li><li>Install SCADA computer UPS.</li><li>Stock extra fuses and safety devices.</li><li>Test phase protection equipment.</li></ol>`:''}
+
+${c('includeAppE')?`<h1>Appendix E: Freeze Preparation for Facilities</h1><ol><li>Create timeline before freezing weather onset.</li><li>Insulate vulnerable outdoor lines.</li><li>Weatherstrip doors and windows.</li><li>Fill wall/door holes.</li><li>Check for rodents at pump facilities.</li><li>Inspect/clean unit heaters.</li><li>Insulate tank level transmitters.</li><li>Insulate tank pressure gauges.</li><li>Adjust tank filling rates.</li><li>Stock 1-week treatment additives.</li><li>Insulate outdoor chemical feed lines.</li><li>Stock space heaters as backup.</li><li>Coordinate with emergency management for generators.</li><li>Coordinate with wholesalers.</li><li>Mark critical valves for snow conditions.</li><li>Operate critical valves before freeze.</li><li>Check antifreeze in equipment.</li><li>Install SCADA UPS backups.</li><li>Close vault lids.</li><li>Insulate raw line injection points.</li><li>Insulate flow tubes.</li><li>Insulate outdoor spigots.</li><li>Inspect fire plug drainage.</li><li>Fill facility vehicles with fuel.</li><li>Install heat tape where needed.</li><li>Lubricate gate padlocks.</li><li>Ensure operators have cold weather PPE.</li></ol>`:''}
+
+${c('includeAppF')?`<h1>Appendix F: Extreme Heat Preparation for Facilities</h1><ol><li>Inspect VFD door fans.</li><li>Clean VFD heat sync units.</li><li>Inspect softstart heaters and contacts.</li><li>Clean and check critical A/C units.</li><li>Inspect and test exhaust fans.</li><li>Inspect cabinet fan thermostats.</li><li>Inspect VFD air vents.</li><li>Inspect exhaust vents and louvers.</li></ol>`:''}
+
+${c('includeAppG')?`<h1>Appendix G: Drought-Specific Best Management Practices</h1>
+<h2>For Water System Operators</h2>
+<ol>
+<li>Increase frequency of system pressure monitoring during drought conditions.</li>
+<li>Implement targeted leak detection surveys on main distribution lines.</li>
+<li>Reduce system flushing to minimum required for water quality maintenance.</li>
+<li>Monitor source water levels and quality parameters on an accelerated schedule.</li>
+<li>Coordinate with neighboring systems on mutual aid agreements and emergency interconnections.</li>
+<li>Evaluate and prioritize infrastructure repairs that reduce system losses.</li>
+<li>Increase meter reading frequency to identify unusual consumption patterns.</li>
+<li>Implement pressure management to reduce overall system demand during peak periods.</li>
+<li>Prepare and test emergency interconnection points with adjacent water systems.</li>
+<li>Document all drought response actions for post-event review and improvement.</li>
+</ol>
+<h2>For Commercial and Institutional Customers</h2>
+<ol>
+<li>Conduct water use audits to identify reduction opportunities.</li>
+<li>Install sub-meters on high-use equipment to track consumption.</li>
+<li>Implement cooling tower water management best practices.</li>
+<li>Convert once-through cooling systems to recirculating systems.</li>
+<li>Reclaim and reuse process water where feasible.</li>
+<li>Adjust landscaping irrigation schedules to pre-dawn hours only.</li>
+<li>Replace high-water-use fixtures with WaterSense-labeled alternatives.</li>
+</ol>
+<h2>For Residential Customers</h2>
+<ol>
+<li>Limit lawn watering to established turf only; allow non-essential turf to go dormant.</li>
+<li>Apply mulch around trees and garden beds to reduce evaporation.</li>
+<li>Group plants by water needs (hydrozoning) to avoid overwatering.</li>
+<li>Collect and reuse household gray water for landscape irrigation where permitted.</li>
+<li>Delay planting new landscaping until drought conditions improve.</li>
+<li>Convert portions of lawn to drought-resistant native plantings.</li>
+<li>Inspect and repair all household fixtures, toilets, and irrigation components for leaks.</li>
+<li>Reduce shower times to 5 minutes or less during drought stages.</li>
+</ol>`:''}
+
+${c('includeAppH')?(() => { const outreachKit = buildOutreachKitContent(); return `<h1>Appendix H: Outreach Kit</h1>
+<p>The following editable drafts are generated from the current plan selections and should be reviewed, tailored, and approved before external distribution.</p>
+<h2>General System Update Flyer Draft</h2>
+${outreachKit.flyer}
+<h2>Short Social Post</h2>
+<p>${esc(outreachKit.socialShort)}</p>
+<h2>Long Social / Website Post</h2>
+<p>${esc(outreachKit.socialLong)}</p>
+<h2>Mass Text / SMS Draft</h2>
+<p>${esc(outreachKit.sms)}</p>
+<h2>Website Notice Draft</h2>
+${outreachKit.website}
+<h2>Seasonal Outreach Campaigns</h2>
+<p>The following campaign drafts are based on the Seasonal Education Calendar choices and can be tailored for seasonal posts, flyers, website notices, and text alerts.</p>
+${renderSeasonalOutreachCampaigns(outreachKit.seasonalCampaigns)}`; })():''}
+
+<!-- SIGNATURE PAGE -->
+<h1 style="page-break-before:always;">Signature Page</h1>
+<p>This Impact Response Plan has been reviewed and approved by the authorized representatives of ${WP}.</p>
+<br><br>
+<div class="sig-block">
+<p><strong>${esc(WP)}</strong></p><br><br>
+<p>Signature: ________________________________________</p><br>
+<p>Printed Name: ________________________________________</p><br>
+<p>Title: ________________________________________</p><br>
+<p>Date: ________________________________________</p><br><br><br>
+<p><strong>Board Approval</strong></p><br><br>
+<p>Chair/President Signature: ________________________________________</p><br>
+<p>Printed Name: ________________________________________</p><br>
+<p>Date: ________________________________________</p><br><br><br>
+<p>Secretary Signature: ________________________________________</p><br>
+<p>Printed Name: ________________________________________</p><br>
+<p>Date: ________________________________________</p>
+</div>
+
+<br><br>
+<hr style="border:none;border-top:1px solid #ccc;margin:24pt 0;">
+<p class="doc-footer-note">&copy; 2026 Choctaw Nation of Oklahoma. All rights reserved. Impact Response Plan Generator v3.7 &middot; Choctaw Nation Environmental Protection Service &middot; Office of Water Resource Management. No waiver of tribal sovereignty, sovereign immunity, jurisdiction, or governmental authority is expressed or implied.</p>
+
+</body></html>`;
+}
+</script>
+</body>
+</html>
