@@ -5,9 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Choctaw Nation OWRM Toolkit</title>
     <link rel="stylesheet" href="https://use.typekit.net/eyx8ysz.css" />
+    <style>
+      /* Fallback styling shown only when this dev template is opened
+         directly via file:// (no Vite, no build). React replaces the
+         #root contents as soon as the bundle runs, so this never
+         appears in the production single-file output. */
+      html, body { margin: 0; min-height: 100%; background: #eef3f5;
+        font-family: 'Gill Sans Nova','Gill Sans MT','Trebuchet MS',Arial,sans-serif;
+        color: #10212b; }
+      .wrm-bootstrap-fallback {
+        max-width: 640px; margin: 8vh auto; padding: 36px 36px 32px;
+        background: #fff; border-radius: 22px;
+        box-shadow: 0 20px 48px rgba(15,38,53,.11);
+        border-top: 6px solid #00853e;
+      }
+      .wrm-bootstrap-fallback .eyebrow {
+        text-transform: uppercase; letter-spacing: .14em;
+        font-size: .72rem; color: #4e6774; font-weight: 600;
+        display: inline-flex; align-items: center; gap: 10px;
+      }
+      .wrm-bootstrap-fallback .eyebrow::before {
+        content: ''; width: 9px; height: 9px; transform: rotate(45deg);
+        background: #00853e; display: inline-block;
+      }
+      .wrm-bootstrap-fallback h1 {
+        margin: 12px 0 14px; font-size: 1.7rem; letter-spacing: -.01em;
+        color: #0f2f3f;
+      }
+      .wrm-bootstrap-fallback p { margin: 0 0 14px; line-height: 1.55; color: #314754; }
+      .wrm-bootstrap-fallback ol { margin: 12px 0 18px 22px; padding: 0; line-height: 1.6; }
+      .wrm-bootstrap-fallback li { margin-bottom: 10px; }
+      .wrm-bootstrap-fallback code {
+        background: #f3f6f7; border: 1px solid #dbe5eb; border-radius: 6px;
+        padding: 2px 7px; font-size: .9em;
+      }
+      .wrm-bootstrap-fallback strong { color: #0f2f3f; }
+      .wrm-bootstrap-fallback .wrm-foot {
+        margin-top: 22px; padding-top: 16px; border-top: 1px solid #e7eef2;
+        font-size: .8rem; color: #5f7682;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="wrm-bootstrap-fallback">
+        <span class="eyebrow">Choctaw Nation OWRM Toolkit</span>
+        <h1>You opened the source template</h1>
+        <p>
+          This file (<code>wrm-app/index.html</code>) is the development
+          template — it only works when Vite is serving the project.
+          To use the toolkit:
+        </p>
+        <ol>
+          <li>
+            Open <strong>OWRM-Toolkit.html</strong> at the top of this
+            download instead. It is a single self-contained HTML file
+            that works offline with no install — just double-click it.
+          </li>
+          <li>
+            If you actually need to rebuild from source, run
+            <code>npm install &amp;&amp; npm run build:dist</code> inside
+            the <code>wrm-app/</code> folder. That regenerates the
+            top-level <code>OWRM-Toolkit.html</code>.
+          </li>
+        </ol>
+        <div class="wrm-foot">
+          Office of Water Resource Management · Environmental Protection Service
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
