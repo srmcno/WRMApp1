@@ -68,6 +68,43 @@ function fileUrlSafeScriptPlugin() {
       });
       // Remove modulepreload links — irrelevant once everything is inlined.
       html = html.replace(/<link\s+rel="modulepreload"[^>]*>\s*/g, '');
+
+      // Move the inlined application bundle out of <head> and into the
+      // very end of <body>. With type="module" stripped, the bundle is
+      // a classic <script> that runs synchronously while parsing — if
+      // it stays in <head>, document.getElementById('root') is null
+      // because <body> hasn't been parsed yet, React fails to mount,
+      // and the page renders blank.
+      //
+      // Heuristic: scan all <script>...</script> blocks that sit
+      // inside <head>, pick the largest one (the multi-MB bundle),
+      // and reinsert it immediately before </body>. Other small
+      // scripts in <head> (e.g. iframe storage shims, polyfills)
+      // are left in place.
+      const headEnd = html.indexOf('</head>');
+      const bodyEnd = html.lastIndexOf('</body>');
+      if (headEnd !== -1 && bodyEnd !== -1) {
+        const headSlice = html.slice(0, headEnd);
+        const scriptRe = /<script\b[^>]*>([\s\S]*?)<\/script>/g;
+        let m;
+        let biggest = null;
+        while ((m = scriptRe.exec(headSlice)) !== null) {
+          if (!biggest || m[0].length > biggest[0].length) {
+            biggest = { start: m.index, end: m.index + m[0].length, text: m[0], len: m[0].length };
+          }
+        }
+        // Only relocate if the candidate is plausibly the bundle
+        // (>= 64 KB — anything smaller is a polyfill or shim).
+        if (biggest && biggest.len >= 64 * 1024) {
+          html =
+            html.slice(0, biggest.start) +
+            html.slice(biggest.end, bodyEnd) +
+            biggest.text +
+            '\n' +
+            html.slice(bodyEnd);
+        }
+      }
+
       if (html !== before) {
         writeFileSync(file, html);
       }
