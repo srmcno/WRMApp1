@@ -14,6 +14,22 @@ const LEGACY_MAP = [
   ['ww-flow-guide-state-v3', nsKey('flow', 'state-v3')],
 ];
 
+export function clearAllWrmStorage() {
+  if (typeof localStorage === 'undefined') return;
+  // Remove every wrm:* key plus the legacy standalone-app keys.
+  const toRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k) continue;
+    if (k.startsWith(NS) || k === 'IRP_PLAN_v3' || k === 'ww-flow-guide-state-v3') {
+      toRemove.push(k);
+    }
+  }
+  for (const k of toRemove) {
+    try { localStorage.removeItem(k); } catch { /* ignore */ }
+  }
+}
+
 export function runLegacyMigration() {
   if (typeof localStorage === 'undefined') return;
   if (localStorage.getItem(nsKey('_meta', 'migrated-v1'))) return;

@@ -1,5 +1,15 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import irpHtml from './irp.html?raw';
+import irpHtmlB64 from './irp.html?b64';
+
+// Decoded once, lazily, so the raw bundle never contains a literal
+// </script> sequence (which would break vite-plugin-singlefile output).
+function decodeHtml(b64) {
+  const bin = atob(b64);
+  // The IRP HTML is ASCII-safe, but decode UTF-8 properly anyway.
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
+}
 import { nsKey } from '../../shared/storage.js';
 
 // The legacy IRP generator is a self-contained vanilla JS/HTML
@@ -62,7 +72,7 @@ function buildSrcDoc(html) {
 
 export default function IrpGenerator() {
   const ref = useRef(null);
-  const srcDoc = useMemo(() => buildSrcDoc(irpHtml), []);
+  const srcDoc = useMemo(() => buildSrcDoc(decodeHtml(irpHtmlB64)), []);
 
   useEffect(() => {
     // Trigger a print on Ctrl/Cmd+P from the shell context too.
