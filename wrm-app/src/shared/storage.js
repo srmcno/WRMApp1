@@ -21,7 +21,7 @@ export function clearAllWrmStorage() {
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
     if (!k) continue;
-    if (k.startsWith(NS) || k === 'IRP_PLAN_v3' || k === 'ww-flow-guide-state-v3') {
+    if (k.startsWith(NS) || k === 'IRP_PLAN_v3' || k === 'irp_generator_save' || k === 'irp_generator_v4' || k.startsWith('irp_generator_v4:') || k === 'ww-flow-guide-state-v3') {
       toRemove.push(k);
     }
   }
