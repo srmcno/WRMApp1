@@ -1,0 +1,12 @@
+{
+  "sha256": "37d6b45c3e49265f68e7489a545bb493fe4dfd652efaec0474987909cd7dc510",
+  "parts": [
+    ".irp-v4-staging/part-01.b64",
+    ".irp-v4-staging/part-02.b64",
+    ".irp-v4-staging/part-03.b64",
+    ".irp-v4-staging/part-04.b64",
+    ".irp-v4-staging/part-05.b64",
+    ".irp-v4-staging/part-06.b64",
+    ".irp-v4-staging/part-07.b64"
+  ]
+}
