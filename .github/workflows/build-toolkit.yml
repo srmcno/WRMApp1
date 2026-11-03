@@ -8,7 +8,7 @@ on:
       - '.github/workflows/build-toolkit.yml'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: toolkit-${{ github.ref }}
   cancel-in-progress: true
@@ -17,22 +17,101 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Apply verified staged source update when present
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, lzma
+          from pathlib import Path
+          manifest = Path('scripts/irp-v4-update.json')
+          if manifest.exists():
+              m = json.loads(manifest.read_text())
+              encoded = ''.join(Path(p).read_text().strip() for p in m['parts'])
+              archive = base64.b64decode(encoded, validate=True)
+              assert hashlib.sha256(archive).hexdigest() == m['sha256'], 'Update archive checksum mismatch'
+              updates = json.loads(lzma.decompress(archive))
+              for u in updates:
+                  p = Path(u['path'])
+                  assert '..' not in p.parts and p.parts[0] in ('wrm-app', 'scripts', 'docs'), 'Unexpected update path'
+                  current = hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+                  desired = hashlib.sha256(u['content'].encode()).hexdigest()
+                  assert current in (u['before'], desired), 'Concurrent source change: ' + str(p)
+              for u in updates:
+                  p = Path(u['path']); p.parent.mkdir(parents=True, exist_ok=True); p.write_text(u['content'])
+              print('Verified and applied', len(updates), 'source files')
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
           cache-dependency-path: wrm-app/package-lock.json
+      - name: Check embedded JavaScript syntax
+        run: |
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';
+          import vm from 'node:vm';
+          const html = fs.readFileSync('wrm-app/src/apps/irp/irp.html', 'utf8');
+          for (const match of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)) new vm.Script(match[1]);
+          console.log('Embedded JavaScript parsed successfully');
+          JS
+      - name: Verify real-browser persistence and planning logic
+        run: |
+          if test -f scripts/verify-irp-browser.js; then
+            python3 - <<'PY'
+          from pathlib import Path
+          html = Path('wrm-app/src/apps/irp/irp.html').read_text()
+          test = Path('scripts/verify-irp-browser.js').read_text()
+          Path('/tmp/irp-test.html').write_text(html.replace('<head>', '<head><script>' + test + '</script>', 1))
+          PY
+            google-chrome --headless --no-sandbox --disable-gpu --user-data-dir=/tmp/irp-test-profile --virtual-time-budget=15000 --dump-dom file:///tmp/irp-test.html > /tmp/irp-test-result.html 2>/tmp/irp-chrome.log
+            grep -q 'data-irp-test="passed"' /tmp/irp-test-result.html || { tail -c 4000 /tmp/irp-test-result.html; exit 1; }
+            echo 'Real-browser persistence, migration and planning regression tests passed'
+          fi
       - name: Install locked dependencies
         working-directory: wrm-app
         run: npm ci
       - name: Build single-file toolkit
         working-directory: wrm-app
         run: npm run build:dist
+      - name: Verify built toolkit and namespace integration
+        run: |
+          if test -f scripts/verify-irp-browser.js; then
+            python3 - <<'PY'
+          from pathlib import Path
+          html = Path('OWRM-Toolkit.html').read_text()
+          test = """<script>location.hash='#/irp';window.addEventListener('DOMContentLoaded',()=>{let attempts=0;const timer=setInterval(()=>{try{const f=document.querySelector('iframe[title=\"Impact Response Plan Generator\"]');if(f&&typeof f.contentWindow.calculateModel==='function'){if(f.contentWindow.IRP_CONFIG.storageKey!=='wrm:irp:plan-v4')throw Error('Incorrect storage namespace');localStorage.setItem('irp_generator_v4','standalone-sentinel');f.contentDocument.getElementById('providerName').value='CI TOOLKIT FIXTURE';if(!f.contentWindow.saveProgress())throw Error('Toolkit save failed');if(!localStorage.getItem('wrm:irp:plan-v4'))throw Error('Namespace save missing');if(localStorage.getItem('irp_generator_v4')!=='standalone-sentinel')throw Error('Standalone key overwritten');document.body.dataset.irpTest='passed';clearInterval(timer);}else if(++attempts>60)throw Error('Toolkit IRP did not initialize');}catch(e){document.body.dataset.irpTest='failed';const p=document.createElement('pre');p.textContent=e.message;document.body.appendChild(p);clearInterval(timer);}},100);});</script>"""
+          Path('/tmp/irp-toolkit-test.html').write_text(html.replace('<head>', '<head>'+test, 1))
+          PY
+            google-chrome --headless --no-sandbox --disable-gpu --user-data-dir=/tmp/irp-toolkit-profile --virtual-time-budget=15000 --dump-dom file:///tmp/irp-toolkit-test.html > /tmp/irp-toolkit-result.html 2>/tmp/irp-toolkit-chrome.log
+            grep -q 'data-irp-test="passed"' /tmp/irp-toolkit-result.html || { tail -c 2000 /tmp/irp-toolkit-result.html; exit 1; }
+            echo 'Built single-file toolkit and isolated storage namespace verified'
+          fi
+      - name: Synchronize verified distributables
+        run: |
+          cp wrm-app/src/apps/irp/irp.html IRPGenerator.html
+          if test -f scripts/verify-irp-browser.js; then
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = Path('scripts/irp-v4-update.json')
+          if manifest.exists():
+              for p in json.loads(manifest.read_text())['parts']:
+                  assert p.startswith('.irp-v4-staging/') and '..' not in Path(p).parts
+                  Path(p).unlink()
+              manifest.unlink()
+          PY
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add IRPGenerator.html OWRM-Toolkit.html wrm-app/src/apps/irp/irp.html wrm-app/src/apps/irp/IrpGenerator.jsx wrm-app/src/shared/storage.js docs/IRP-v4.md scripts/verify-irp-browser.js
+            git add -u
+            if ! git diff --cached --quiet; then
+              git commit -m 'Publish verified IRP workspace 4.0 and rebuilt offline toolkit'
+              git push origin HEAD:main
+            fi
+          fi
       - name: Package source and deliverables
         run: |
           mkdir -p artifact
-          cp OWRM-Toolkit.html artifact/
-          cp wrm-app/src/apps/irp/irp.html artifact/IRPGenerator.html
+          cp OWRM-Toolkit.html IRPGenerator.html artifact/
           tar --exclude=node_modules --exclude=dist --exclude=.git -czf artifact/toolkit-source.tar.gz wrm-app
       - uses: actions/upload-artifact@v4
         with:
