@@ -1,0 +1,41 @@
+name: Build OWRM toolkit
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wrm-app/**'
+      - 'scripts/**'
+      - '.github/workflows/build-toolkit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: toolkit-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: wrm-app/package-lock.json
+      - name: Install locked dependencies
+        working-directory: wrm-app
+        run: npm ci
+      - name: Build single-file toolkit
+        working-directory: wrm-app
+        run: npm run build:dist
+      - name: Package source and deliverables
+        run: |
+          mkdir -p artifact
+          cp OWRM-Toolkit.html artifact/
+          cp wrm-app/src/apps/irp/irp.html artifact/IRPGenerator.html
+          tar --exclude=node_modules --exclude=dist --exclude=.git -czf artifact/toolkit-source.tar.gz wrm-app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: owrm-toolkit
+          path: artifact/
+          retention-days: 7
